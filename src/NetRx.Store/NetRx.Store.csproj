@@ -1,0 +1,34 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace>NetRx</RootNamespace>
+    <PackageId>NetRx.Store</PackageId>
+    <Version>1.0.0</Version>
+    <Authors>Vitalii Ilchenko</Authors>
+    <Description>State management for .Net projects, inspired by @ngrx/store</Description>
+    <RepositoryUrl>https://github.com/ilchenkob/NetRx.Store</RepositoryUrl>
+    <PackageTags>store;reactive;state;management</PackageTags>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackOnBuild>true</PackOnBuild>
+    <Summary>State management for .Net projects, inspired by @ngrx/store</Summary>
+    <Title>NetRx.Store</Title>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CSharp" Version="4.5.0" />
+    <PackageReference Include="System.Reactive" Version="4.1.0" />
+    <PackageReference Include="System.ValueTuple" Version="4.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Store\" />
+    <Folder Include="Effects\" />
+    <Folder Include="Store\Exceptions\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="StateValueItem.cs" />
+    <Compile Remove="Store\State.cs" />
+    <Compile Remove="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,29 @@
+
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleState", "SampleState\SampleState.csproj", "{D3263B51-60BD-4DDE-B265-1725A238FDCA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetRx.Store", "..\src\NetRx.Store\NetRx.Store.csproj", "{5F7DD1FB-D535-4C44-AE71-0594C2FC717A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleEffects", "SampleEffects\SampleEffects.csproj", "{857B2339-FE07-448D-9C17-93E5382633E6}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D3263B51-60BD-4DDE-B265-1725A238FDCA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D3263B51-60BD-4DDE-B265-1725A238FDCA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D3263B51-60BD-4DDE-B265-1725A238FDCA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D3263B51-60BD-4DDE-B265-1725A238FDCA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5F7DD1FB-D535-4C44-AE71-0594C2FC717A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5F7DD1FB-D535-4C44-AE71-0594C2FC717A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5F7DD1FB-D535-4C44-AE71-0594C2FC717A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5F7DD1FB-D535-4C44-AE71-0594C2FC717A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{857B2339-FE07-448D-9C17-93E5382633E6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{857B2339-FE07-448D-9C17-93E5382633E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{857B2339-FE07-448D-9C17-93E5382633E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{857B2339-FE07-448D-9C17-93E5382633E6}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\NetRx.Store\NetRx.Store.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="State\" />
+    <Folder Include="State\Actions\" />
+    <Folder Include="State\Effects\" />
+    <Folder Include="State\Reducers\" />
+    <Folder Include="State\Selectors\" />
+  </ItemGroup>
+</Project>
