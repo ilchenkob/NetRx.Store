@@ -2,6 +2,9 @@
 
 State management for .Net projects, inspired by [@ngrx/store](https://github.com/ngrx/store)
 
+[![NuGet](https://img.shields.io/badge/nuget-1.0.0-blue.svg)](https://www.nuget.org/packages/NetRx.Store/1.0.0)
+
+
 ### Core concepts
 
 Core principles are the same as in @ngrx/store:
