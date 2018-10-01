@@ -14,20 +14,34 @@ namespace NetRx.Store
         private static readonly Dictionary<string, Dictionary<string, Func<object, object>>> _gettersCache
             = new Dictionary<string, Dictionary<string, Func<object, object>>>();
 
-        internal StateWrapper(object target)
+        private StateWrapper()
+        {
+        }
+
+        internal StateWrapper(object target, string targetTypeName)
         {
             Original = target;
-            Type type = target.GetType();
+            OriginalTypeName = targetTypeName;
+        }
+
+        internal static StateWrapper ForObject<T>(Func<T> func)
+        {
+            var result = new StateWrapper();
+
+            Type type = typeof(T);
             if (!type.IsValueType)
                 throw new InvalidStateTypeException($"{type.FullName} cannot have reference type. Should have struct type");
 
-            OriginalTypeName = type.FullName;
+            result.Original = func();
+            result.OriginalTypeName = type.FullName;
 
-            if (!_gettersCache.ContainsKey(OriginalTypeName))
+            if (!_gettersCache.ContainsKey(result.OriginalTypeName))
             {
-                _gettersCache.Add(OriginalTypeName, new Dictionary<string, Func<object, object>>());
-                BuildGetters(type, OriginalTypeName);
+                _gettersCache.Add(result.OriginalTypeName, new Dictionary<string, Func<object, object>>());
+                result.BuildGetters(type, result.OriginalTypeName);
             }
+
+            return result;
         }
 
         private void BuildGetters(Type type, string prefix)
@@ -66,18 +80,19 @@ namespace NetRx.Store
         public object Get(string name)
         {
             var key = _gettersCache[OriginalTypeName].ContainsKey(name) ? name : $"{name}{EnumerableFieldMarker}";
-            object result;
+
             var propNamePart = key.Substring(OriginalTypeName.Length);
             var pointIndex = propNamePart.LastIndexOf('.');
             if (pointIndex > 0) // want to get sub-property
             {
                 var currentPropertyName = OriginalTypeName;
-                result = Original;
+                var result = Original;
                 foreach (var field in propNamePart.Split('.').Skip(1))
                 {
                     currentPropertyName = $"{currentPropertyName}.{field}";
                     result = _gettersCache[OriginalTypeName][currentPropertyName](result);
                 }
+                return result;
             }
             else if (pointIndex < 0) // want to get original object as it is
             {
@@ -85,9 +100,8 @@ namespace NetRx.Store
             }
             else
             {
-                result = _gettersCache[OriginalTypeName][key](Original);
+                return _gettersCache[OriginalTypeName][key](Original);
             }
-            return result;
         }
 
         public IList<string> FieldNames => _gettersCache[OriginalTypeName].Keys.ToList();

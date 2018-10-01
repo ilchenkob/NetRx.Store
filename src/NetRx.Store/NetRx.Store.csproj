@@ -4,7 +4,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>NetRx</RootNamespace>
     <PackageId>NetRx.Store</PackageId>
-    <Version>1.0.0</Version>
+    <Version>1.1.0</Version>
     <Authors>Vitalii Ilchenko</Authors>
     <Description>State management for .Net projects, inspired by @ngrx/store</Description>
     <RepositoryUrl>https://github.com/ilchenkob/NetRx.Store</RepositoryUrl>
@@ -18,7 +18,6 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.CSharp" Version="4.5.0" />
     <PackageReference Include="System.Reactive" Version="4.1.0" />
-    <PackageReference Include="System.ValueTuple" Version="4.5.0" />
   </ItemGroup>
 
   <ItemGroup>

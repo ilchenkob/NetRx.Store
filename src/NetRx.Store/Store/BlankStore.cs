@@ -31,7 +31,7 @@ namespace NetRx.Store
             {
                 return new Store
                 {
-                    _items = new List<StoreItem> { new StoreItem(new StateWrapper(initialState), reducer) },
+                    _items = new List<StoreItem> { new StoreItem(StateWrapper.ForObject(() => initialState), reducer) },
                     _subscriptions = new ConcurrentDictionary<string, dynamic>(),
                     _effectsWithoutResult = new Dictionary<string, IList<object>>(),
                     _effectsWithResult = new Dictionary<string, IList<object>>()

@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reactive.Subjects;
-using NetRx.Store.Exceptions;
-using NetRx.Effects;
 using Microsoft.CSharp.RuntimeBinder;
+using NetRx.Effects;
+using NetRx.Store.Exceptions;
 
 namespace NetRx.Store
 {
@@ -36,7 +36,7 @@ namespace NetRx.Store
                 return new Store
                 {
                     _items = this._items
-                                 .Concat(new List<StoreItem> { new StoreItem(new StateWrapper(initialState), reducer) })
+                                 .Concat(new List<StoreItem> { new StoreItem(StateWrapper.ForObject(() => initialState), reducer) })
                                  .ToList(),
                     _subscriptions = new ConcurrentDictionary<string, dynamic>(this._subscriptions),
                     _effectsWithoutResult = new Dictionary<string, IList<object>>(this._effectsWithoutResult),
@@ -155,8 +155,8 @@ namespace NetRx.Store
                 try
                 {
                     var newValue = item.Reducer.Reduce((dynamic)item.State.Original, action);
-                    item.State = new StateWrapper(newValue);
-                    modifiedStates.Add((stateName: item.State.OriginalTypeName, prevValue));
+                    item.State = new StateWrapper(newValue, item.State.OriginalTypeName);
+                    modifiedStates.Add((item.State.OriginalTypeName, prevValue));
                 }
                 catch (RuntimeBinderException)
                 {
@@ -187,12 +187,12 @@ namespace NetRx.Store
             foreach (var effect in effects) Invoke(effect, action);
         }
 
-        private void DetectChanges(List<(string stateName, StateWrapper pervState)> modifiedStates)
+        private void DetectChanges(List<(string, StateWrapper)> modifiedStates)
         {
             foreach(var changeInfo in modifiedStates)
             {
-                var currState = _items.First(s => s.State.OriginalTypeName == changeInfo.stateName).State;
-                var prevState = changeInfo.pervState;
+                var currState = _items.First(s => s.State.OriginalTypeName == changeInfo.Item1).State;
+                var prevState = changeInfo.Item2;
 
                 foreach (var field in currState.FieldNames)
                 {
@@ -211,7 +211,7 @@ namespace NetRx.Store
                     }
                 }
 
-                NotifySubscribers(currState, changeInfo.stateName);
+                NotifySubscribers(currState, changeInfo.Item1);
             }
         }
 
