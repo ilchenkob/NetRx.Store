@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -30,7 +31,7 @@ namespace NetRx.Store
 
             Type type = typeof(T);
             if (!type.IsValueType)
-                throw new InvalidStateTypeException($"{type.FullName} cannot have reference type. Should have struct type");
+                throw new InvalidStateTypeException($"'{type.FullName}' cannot have reference type. Should have 'struct' type");
 
             result.Original = func();
             result.OriginalTypeName = type.FullName;
@@ -48,12 +49,25 @@ namespace NetRx.Store
         {
             foreach (var p in type.GetProperties(BindingFlags.Instance | BindingFlags.Public))
             {
-                var isString = string.Equals(p.PropertyType.FullName, "System.String", StringComparison.InvariantCultureIgnoreCase);
+                var isString = p.PropertyType == typeof(string);
                 var isEnumerable = p.PropertyType.GetInterface(typeof(IEnumerable<>).FullName) != null && !isString;
-                if (!p.PropertyType.IsValueType &&
-                    !isString &&
-                    !isEnumerable)
-                    throw new InvalidStatePropertyTypeException($"Property {p.PropertyType.FullName} cannot have reference type. Should have struct type");
+                if (isEnumerable)
+                {
+                    if (p.PropertyType.GetInterface("System.Collections.Immutable.IImmutableArray") == null)
+                        throw new InvalidStatePropertyTypeException(
+                            $"'{p.Name}': only 'ImmutableArray' type is allowed for collections");
+
+                    var nonValueType = p.PropertyType.GenericTypeArguments.FirstOrDefault(a => !a.IsValueType);
+                    if (nonValueType != null)
+                        throw new InvalidStatePropertyTypeException(
+                            $"'{p.Name}' cannot have reference type '{nonValueType.FullName}'. Should have 'struct' type");
+                }
+                else if (!p.PropertyType.IsValueType &&
+                          !isString &&
+                          !isEnumerable)
+                {
+                    throw new InvalidStatePropertyTypeException($"'{p.PropertyType.FullName}' cannot have reference type. Should have 'struct' type");
+                }
 
                 var wrappedObjectParameter = Expression.Parameter(typeof(object));
                 var valueParameter = Expression.Parameter(typeof(object));

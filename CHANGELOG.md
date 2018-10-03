@@ -1,8 +1,13 @@
 ## Changelog
 All notable changes to this project will be documented in this file.
 
+#### 1.2.0 - 2018-10-03
+##### Added
+* Restriction for the state fields: only ```ImmutableArray``` type is allowed for collections.
+
 #### 1.1.0 - 2018-10-01
-* Added few optimization to the internal class ```StateWrapper```.
+##### Added
+* Few optimization to the internal class ```StateWrapper```.
 
 #### 1.0.0 - 2018-09-30
 * Project has been published to Nuget and uploaded to GitHub.
