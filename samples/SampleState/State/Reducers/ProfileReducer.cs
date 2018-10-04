@@ -1,5 +1,4 @@
 ﻿using System.Collections.Immutable;
-using System.Linq;
 using NetRx.Store;
 using actions = SampleState.State.Actions;
 
@@ -18,7 +17,7 @@ namespace SampleState.State.Reducers
 
         public string Email { get; set; }
 
-        public ImmutableArray<Contact> Contacts { get; set; }
+        public ImmutableList<Contact> Contacts { get; set; }
     }
 
     public class ProfileReducer : Reducer<ProfileState>
@@ -37,13 +36,13 @@ namespace SampleState.State.Reducers
 
         public ProfileState Reduce(ProfileState state, actions.AddContact action)
         {
-            state.Contacts = state.Contacts.Concat(new [] { action.Payload }).ToImmutableArray();
+            state.Contacts = state.Contacts.Add(action.Payload);
             return state;
         }
 
         public ProfileState Reduce(ProfileState state, actions.ClearContacts action)
         {
-            state.Contacts = ImmutableArray.Create<Contact>();
+            state.Contacts = state.Contacts.Clear();
             return state;
         }
     }

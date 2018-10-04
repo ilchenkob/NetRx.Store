@@ -53,9 +53,12 @@ namespace NetRx.Store
                 var isEnumerable = p.PropertyType.GetInterface(typeof(IEnumerable<>).FullName) != null && !isString;
                 if (isEnumerable)
                 {
-                    if (p.PropertyType.GetInterface("System.Collections.Immutable.IImmutableArray") == null)
+                    var hasImmutableInterface = p.PropertyType
+                                                  .GetInterfaces()
+                                                  .Any(t => t.FullName.StartsWith("System.Collections.Immutable", StringComparison.InvariantCulture));
+                    if (!hasImmutableInterface)
                         throw new InvalidStatePropertyTypeException(
-                            $"'{p.Name}': only 'ImmutableArray' type is allowed for collections");
+                            $"'{p.Name}': only types from 'System.Collections.Immutable' namespace are allowed for collections");
 
                     var nonValueType = p.PropertyType.GenericTypeArguments.FirstOrDefault(a => !a.IsValueType);
                     if (nonValueType != null)

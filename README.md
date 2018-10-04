@@ -2,7 +2,7 @@
 
 State management for .Net projects, inspired by [@ngrx/store](https://github.com/ngrx/store)
 
-[![NuGet](https://img.shields.io/badge/nuget-1.1.0-blue.svg)](https://www.nuget.org/packages/NetRx.Store/1.1.0)
+[![NuGet](https://img.shields.io/badge/nuget-1.2.1-blue.svg)](https://www.nuget.org/packages/NetRx.Store)
 
 
 ### Core concepts
@@ -19,7 +19,7 @@ Core principles are the same as in @ngrx/store:
 
 #### State
 
-State cannot have reference type, it should be struct and can have properties of following types: simple type (```bool```, ```int```, ```double```, ```string```, etc), collection that implements ```IEnumerable<T>``` or user defined ```struct```.
+State cannot have reference type, it should be struct and can have properties of following types: simple type (```bool```, ```int```, ```double```, ```string```, etc), collection type from ```System.Collections.Immutable``` namespace or user defined ```struct```.
 
 Example:
 
@@ -30,7 +30,7 @@ public struct AppState
     public string Status { get; set; }
     public decimal Amount { get; set; }
     public UserInfo User { get; set; }
-    public List<Person> Contacts { get; set; }
+    public ImmutableList<Person> Contacts { get; set; }
 }
 ```
 
@@ -78,13 +78,13 @@ public class AppReducer : Reducer<AppState>
 
     public ProfileState Reduce(ProfileState state, AddContact action)
     {
-        state.Contacts = state.Contacts.Concat(new [] { action.Payload }).ToList();
+        state.Contacts = state.Contacts.Add(action.Payload);
         return state;
     }
 
     public ProfileState Reduce(ProfileState state, ClearContacts action)
     {
-        state.Contacts = new List<Contact>();
+        state.Contacts = state.Contacts.Clear();
         return state;
     }
 }

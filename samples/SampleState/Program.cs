@@ -14,7 +14,7 @@ namespace SampleState
             {
                 Email = string.Empty,
                 Name = string.Empty,
-                Contacts = ImmutableArray.Create<Contact>()
+                Contacts = ImmutableList.Create<Contact>()
             };
 
             var store = Store.Create().WithState(initialState, new ProfileReducer());
@@ -27,13 +27,13 @@ namespace SampleState
             {
                 Console.WriteLine($"Email: {value}");
             });
-            store.Select<ProfileState, ImmutableArray<Contact>> (state => state.Contacts).Subscribe(value =>
+            store.Select<ProfileState, ImmutableList<Contact>>(state => state.Contacts).Subscribe(value =>
             {
-                Console.WriteLine($"Contacts: {value.Length}");
+                Console.WriteLine($"Contacts: {value.Count}");
             });
             store.Select<ProfileState, ProfileState>(state => state).Subscribe(value =>
             {
-                Console.WriteLine($"State value: {value.Name} {value.Email} {value.Contacts.Length}");
+                Console.WriteLine($"State value: {value.Name} {value.Email} {value.Contacts.Count}");
             });
 
             store.Dispatch(new actions.SetEmail("test@mail.com"));
