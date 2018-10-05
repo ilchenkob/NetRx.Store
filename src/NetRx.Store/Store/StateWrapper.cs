@@ -73,14 +73,12 @@ namespace NetRx.Store
                 }
 
                 var wrappedObjectParameter = Expression.Parameter(typeof(object));
-                var valueParameter = Expression.Parameter(typeof(object));
-
                 var getExpression = Expression.Lambda<Func<object, object>>(
                     Expression.Convert(
-                        Expression.Property(
-                            Expression.Convert(wrappedObjectParameter, type), p),
+                        Expression.Property(Expression.Convert(wrappedObjectParameter, type), p),
                         typeof(object)),
-                    wrappedObjectParameter);
+                    wrappedObjectParameter
+                );
 
                 string name = isEnumerable ? $"{prefix}.{p.Name}{EnumerableFieldMarker}" : $"{prefix}.{p.Name}";
 

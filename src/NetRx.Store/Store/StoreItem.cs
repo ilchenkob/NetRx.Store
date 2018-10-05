@@ -2,7 +2,7 @@
 {
     internal sealed class StoreItem
     {
-        internal StoreItem(StateWrapper state, dynamic reducer)
+        internal StoreItem(StateWrapper state, ReducerWrapper reducer)
         {
             State = state;
             Reducer = reducer;
@@ -10,6 +10,6 @@
 
         internal StateWrapper State { get; set; }
 
-        internal dynamic Reducer { get; private set; }
-    }
+        internal ReducerWrapper Reducer { get; private set; }
+  }
 }

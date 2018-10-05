@@ -29,14 +29,20 @@ namespace NetRx.Store
         /// <param name="initialState">Initial state value</param>
         /// <param name="reducer">Reducer for the state</param>
         /// <typeparam name="TState">State type</typeparam>
-        public new Store WithState<TState>(TState initialState, Reducer<TState> reducer)
+        public new Store WithState<TState, TReducer>(TState initialState, TReducer reducer) where TReducer : Reducer<TState>
         {
             try
             {
                 return new Store
                 {
                     _items = this._items
-                                 .Concat(new List<StoreItem> { new StoreItem(StateWrapper.ForObject(() => initialState), reducer) })
+                                 .Concat(new List<StoreItem>
+                                 {
+                                    new StoreItem(
+                                        StateWrapper.ForObject(() => initialState),
+                                        ReducerWrapper.ForObject<TState, TReducer>(reducer)
+                                    )
+                                 })
                                  .ToList(),
                     _subscriptions = new ConcurrentDictionary<string, dynamic>(this._subscriptions),
                     _effectsWithoutResult = new Dictionary<string, IList<object>>(this._effectsWithoutResult),
@@ -142,29 +148,22 @@ namespace NetRx.Store
         /// Dispatches the action.
         /// </summary>
         /// <param name="action">Action to dispatch</param>
-        public void Dispatch(Action action) => DispatchInternal(action);
-
-        private void DispatchInternal(dynamic action)
+        public void Dispatch<T>(T action) where T : Action
         {
-            var _prevStates = _items.Select(i => i.State).ToList();
+            var actionTypeName = typeof(T).FullName;
 
             var modifiedStates = new List<(string stateName, StateWrapper pervState)>();
             foreach (var item in _items)
             {
-                var prevValue = item.State;
-                try
+                if (item.Reducer.CanHandle(actionTypeName))
                 {
-                    var newValue = item.Reducer.Reduce((dynamic)item.State.Original, action);
+                    var prevValue = item.State;
+                    var newValue = item.Reducer.Invoke(actionTypeName, item.State.Original, action);
                     item.State = new StateWrapper(newValue, item.State.OriginalTypeName);
                     modifiedStates.Add((item.State.OriginalTypeName, prevValue));
                 }
-                catch (RuntimeBinderException)
-                {
-                    // skip this reducer, it doesn't support that action
-                }
             }
 
-            var actionTypeName = action.GetType().FullName;
             if (this._effectsWithoutResult.ContainsKey(actionTypeName))
                 DispatchEffects(this._effectsWithoutResult[actionTypeName], action, false);
             if (this._effectsWithResult.ContainsKey(actionTypeName))
@@ -179,7 +178,7 @@ namespace NetRx.Store
             async void Invoke(dynamic effect, dynamic actionToInvoke)
             {
                 if (triggersResultAction)
-                    this.DispatchInternal(await effect.Invoke(actionToInvoke));
+                    this.Dispatch(await effect.Invoke(actionToInvoke));
                 else
                     effect.Invoke(actionToInvoke);
             }

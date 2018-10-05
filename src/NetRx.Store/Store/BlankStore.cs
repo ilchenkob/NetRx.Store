@@ -25,13 +25,19 @@ namespace NetRx.Store
         /// <param name="initialState">Initial state value</param>
         /// <param name="reducer">Reducer for the state</param>
         /// <typeparam name="TState">State type</typeparam>
-        public Store WithState<TState>(TState initialState, Reducer<TState> reducer)
+        public Store WithState<TState, TReducer>(TState initialState, TReducer reducer) where TReducer : Reducer<TState>
         {
             try
             {
                 return new Store
                 {
-                    _items = new List<StoreItem> { new StoreItem(StateWrapper.ForObject(() => initialState), reducer) },
+                    _items = new List<StoreItem>
+                    {
+                        new StoreItem(
+                            StateWrapper.ForObject(() => initialState),
+                            ReducerWrapper.ForObject<TState, TReducer>(reducer)
+                        )
+                    },
                     _subscriptions = new ConcurrentDictionary<string, dynamic>(),
                     _effectsWithoutResult = new Dictionary<string, IList<object>>(),
                     _effectsWithResult = new Dictionary<string, IList<object>>()

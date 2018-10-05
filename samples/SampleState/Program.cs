@@ -38,7 +38,7 @@ namespace SampleState
 
             store.Dispatch(new actions.SetEmail("test@mail.com"));
             store.Dispatch(new actions.SetName("Test Profile"));
-            store.Dispatch(new actions.AddContact(new Contact { Name = "Contact 1", Email = "contact_1@mail.com"}));
+            store.Dispatch(new actions.AddContact(new Contact { Name = "Contact 1", Email = "contact_1@mail.com" }));
             store.Dispatch(new actions.AddContact(new Contact { Name = "Contact 2", Email = "contact_2@mail.com" }));
             store.Dispatch(new actions.AddContact(new Contact { Name = "Contact 3", Email = "contact_3@mail.com" }));
             store.Dispatch(new actions.ClearContacts());
