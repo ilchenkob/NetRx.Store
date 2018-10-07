@@ -1,6 +1,10 @@
 ## Changelog
 All notable changes to this project will be documented in this file.
 
+#### 1.3.0 - 2018-10-08
+##### Added
+* Internal wrappers for Reducer, Subscription and Effect. It slightly slows down the store initialization time. But at the same time gives significant improvement in Reducer and Effect invocations and their execution takes much less time.
+
 #### 1.2.1 - 2018-10-04
 ##### Added
 * Restriction for collections changed: all types from ```System.Collections.Immutable``` namespace are allowed.

@@ -7,9 +7,9 @@ namespace NetRx.Store
 {
     internal class ReducerWrapper<TState> : ReducerWrapper
     {
-        private readonly Dictionary<string, ReduceMethod> _actionHandlers;
+        private readonly Dictionary<string, IReduceMethod> _actionHandlers;
 
-        internal ReducerWrapper(Dictionary<string, ReduceMethod> actionHandlers)
+        internal ReducerWrapper(Dictionary<string, IReduceMethod> actionHandlers)
         {
             _actionHandlers = actionHandlers;
         }
@@ -21,7 +21,7 @@ namespace NetRx.Store
                     => _actionHandlers.ContainsKey(actionTypeFullName);
     }
 
-    public abstract class ReducerWrapper
+    internal abstract class ReducerWrapper
     {
         private const string ReducerMethodName = "Reduce";
 
@@ -62,7 +62,7 @@ namespace NetRx.Store
                 return new
                 {
                     ActionName = m.GetParameters()[1].ParameterType.FullName,
-                    ReduceMethod = (ReduceMethod)reduceMethodConstructor.Invoke(new[] { reduceFunc })
+                    ReduceMethod = (IReduceMethod)reduceMethodConstructor.Invoke(new[] { reduceFunc })
                 };
             })
             .ToDictionary(k => k.ActionName, v => v.ReduceMethod);
@@ -87,7 +87,12 @@ namespace NetRx.Store
             return false;
         }
 
-        internal class ReduceMethod<TState, TAction> : ReduceMethod
+        internal interface IReduceMethod
+        {
+            object Invoke(object state, object action);
+        }
+
+        internal class ReduceMethod<TState, TAction> : IReduceMethod
         {
             private readonly Func<TState, TAction, TState> _func;
 
@@ -96,12 +101,7 @@ namespace NetRx.Store
                 _func = (Func<TState, TAction, TState>)del;
             }
 
-            public override object Invoke(object state, object action) => _func((TState)state, (TAction)action);
-        }
-
-        internal abstract class ReduceMethod
-        {
-            public abstract object Invoke(object state, object action);
+            public object Invoke(object state, object action) => _func((TState)state, (TAction)action);
         }
     }
 }

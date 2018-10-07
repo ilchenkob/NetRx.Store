@@ -1,10 +1,11 @@
 ﻿using System.Threading.Tasks;
-using NetRx.Store;
+using Action = NetRx.Store.Action;
 
 namespace NetRx.Effects
 {
     public abstract class Effect
     {
+        internal const string InvokeMethodName = "Invoke";
     }
 
     public abstract class Effect<TInputAction> : Effect where TInputAction : Action

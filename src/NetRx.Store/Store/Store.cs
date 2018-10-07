@@ -3,8 +3,6 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Reactive.Subjects;
-using Microsoft.CSharp.RuntimeBinder;
 using NetRx.Effects;
 using NetRx.Store.Exceptions;
 
@@ -44,9 +42,8 @@ namespace NetRx.Store
                                     )
                                  })
                                  .ToList(),
-                    _subscriptions = new ConcurrentDictionary<string, dynamic>(this._subscriptions),
-                    _effectsWithoutResult = new Dictionary<string, IList<object>>(this._effectsWithoutResult),
-                    _effectsWithResult = new Dictionary<string, IList<object>>(this._effectsWithResult)
+                    _subscriptions = new ConcurrentDictionary<string, ISubscription>(this._subscriptions),
+                    _effects = new Dictionary<string, IList<IEffectMethodWrapper>>(this._effects)
                 };
             }
             catch (InvalidStateTypeException stateTypeException)
@@ -66,35 +63,24 @@ namespace NetRx.Store
         /// <param name="effects">Effects collection</param>
         public Store WithEffects(IEnumerable<Effect> effects)
         {
-            var storeEffectsWithoutResult = new Dictionary<string, IList<object>>(this._effectsWithoutResult);
-            var storeEffectsWithResult = new Dictionary<string, IList<object>>(this._effectsWithResult);
+            var storeEffects = new Dictionary<string, IList<IEffectMethodWrapper>>(this._effects);
+            var store = new Store
+            {
+                _items = this._items.ToList(),
+                _subscriptions = new ConcurrentDictionary<string, ISubscription>(this._subscriptions),
+                _effects = storeEffects
+            };
 
             foreach (var effect in effects)
             {
-                var typeOfInputAction = effect.GetType().BaseType.GenericTypeArguments[0].FullName;
-                if (effect.GetType().BaseType.GenericTypeArguments.Length == 1)
-                {
-                    if (storeEffectsWithoutResult.ContainsKey(typeOfInputAction))
-                        storeEffectsWithoutResult[typeOfInputAction].Add(effect as Effect<Action>);
-                    else
-                        storeEffectsWithoutResult.Add(typeOfInputAction, new List<object> { effect });
-                }
-                else if (effect.GetType().BaseType.GenericTypeArguments.Length == 2)
-                {
-                    if (storeEffectsWithResult.ContainsKey(typeOfInputAction))
-                        storeEffectsWithResult[typeOfInputAction].Add(effect as Effect<Action, Action>);
-                    else
-                        storeEffectsWithResult.Add(typeOfInputAction, new List<object> { effect });
-                }
+                var wrapper = EffectWrapper.FromObject(store, effect);
+                if (storeEffects.ContainsKey(wrapper.ActionTypeName))
+                    storeEffects[wrapper.ActionTypeName].Add(wrapper);
+                else
+                    storeEffects.Add(wrapper.ActionTypeName, new List<IEffectMethodWrapper> { wrapper });
             }
 
-            return new Store
-            {
-                _items = this._items.ToList(),
-                _subscriptions = new ConcurrentDictionary<string, dynamic>(this._subscriptions),
-                _effectsWithoutResult = storeEffectsWithoutResult,
-                _effectsWithResult = storeEffectsWithResult
-            };
+            return store;
         }
 
         /// <summary>
@@ -106,9 +92,8 @@ namespace NetRx.Store
             return new Store
             {
                 _items = this._items.ToList(),
-                _subscriptions = new ConcurrentDictionary<string, dynamic>(this._subscriptions),
-                _effectsWithoutResult = new Dictionary<string, IList<object>>(),
-                _effectsWithResult = new Dictionary<string, IList<object>>()
+                _subscriptions = new ConcurrentDictionary<string, ISubscription>(this._subscriptions),
+                _effects = new Dictionary<string, IList<IEffectMethodWrapper>>()
             };
         }
 
@@ -135,13 +120,14 @@ namespace NetRx.Store
             }
 
             var subscriptionName = $"{typeof(TState).FullName}{memberName}";
+            var subscription = _subscriptions.GetOrAdd(subscriptionName, (propName) =>
+            {
+                TStateProperty lastValue = (TStateProperty)_items.FirstOrDefault(i => i.State.HasGeter(subscriptionName))
+                                                                 .State.Get(subscriptionName);
+                return new Subscription<TStateProperty>(lastValue);
+            });
 
-            TStateProperty lastValue = (TStateProperty)_items.FirstOrDefault(i => i.State.HasGeter(subscriptionName))
-                                     .State.Get(subscriptionName);
-            var subject = new BehaviorSubject<TStateProperty>(lastValue);
-            _subscriptions.TryAdd(subscriptionName, subject);
-            _subscriptions.TryGetValue(subscriptionName, out dynamic observable);
-            return observable as IObservable<TStateProperty>;
+            return ((Subscription<TStateProperty>)subscription).AsObservable();
         }
 
         /// <summary>
@@ -164,26 +150,16 @@ namespace NetRx.Store
                 }
             }
 
-            if (this._effectsWithoutResult.ContainsKey(actionTypeName))
-                DispatchEffects(this._effectsWithoutResult[actionTypeName], action, false);
-            if (this._effectsWithResult.ContainsKey(actionTypeName))
-                DispatchEffects(this._effectsWithResult[actionTypeName], action, true);
+            if (this._effects.ContainsKey(actionTypeName))
+                DispatchEffects(this._effects[actionTypeName], action);
 
             if (modifiedStates.Count > 0)
                 DetectChanges(modifiedStates);
         }
 
-        private void DispatchEffects(IList<object> effects, object action, bool triggersResultAction)
+        private void DispatchEffects<T>(IList<IEffectMethodWrapper> effects, T action) where T : Action
         {
-            async void Invoke(dynamic effect, dynamic actionToInvoke)
-            {
-                if (triggersResultAction)
-                    this.Dispatch(await effect.Invoke(actionToInvoke));
-                else
-                    effect.Invoke(actionToInvoke);
-            }
-
-            foreach (var effect in effects) Invoke(effect, action);
+            foreach (var effect in effects) effect.Invoke(action);
         }
 
         private void DetectChanges(List<(string, StateWrapper)> modifiedStates)
@@ -218,7 +194,7 @@ namespace NetRx.Store
         {
             if (_subscriptions.ContainsKey(field))
             {
-                _subscriptions[field].OnNext((dynamic)wrappedState.Get(field));
+                _subscriptions[field].OnNext(wrappedState.Get(field));
             }
         }
     }

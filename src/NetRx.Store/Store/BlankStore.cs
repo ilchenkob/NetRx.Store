@@ -1,5 +1,6 @@
 ﻿using System.Collections.Concurrent;
 using System.Collections.Generic;
+using NetRx.Effects;
 using NetRx.Store.Exceptions;
 
 namespace NetRx.Store
@@ -8,11 +9,9 @@ namespace NetRx.Store
     {
         internal IList<StoreItem> _items;
 
-        internal ConcurrentDictionary<string, dynamic> _subscriptions;
+        internal ConcurrentDictionary<string, ISubscription> _subscriptions;
 
-        internal Dictionary<string, IList<object>> _effectsWithoutResult;
-
-        internal Dictionary<string, IList<object>> _effectsWithResult;
+        internal Dictionary<string, IList<IEffectMethodWrapper>> _effects;
 
         internal BlankStore()
         {
@@ -38,9 +37,8 @@ namespace NetRx.Store
                             ReducerWrapper.ForObject<TState, TReducer>(reducer)
                         )
                     },
-                    _subscriptions = new ConcurrentDictionary<string, dynamic>(),
-                    _effectsWithoutResult = new Dictionary<string, IList<object>>(),
-                    _effectsWithResult = new Dictionary<string, IList<object>>()
+                    _subscriptions = new ConcurrentDictionary<string, ISubscription>(),
+                    _effects = new Dictionary<string, IList<IEffectMethodWrapper>>()
                 };
             }
             catch (InvalidStateTypeException stateTypeException)

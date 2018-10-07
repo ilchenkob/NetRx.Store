@@ -10,7 +10,7 @@ namespace SampleEffects.State.Effects
     {
         public override async Task<actions.LoadDataSuccess> Invoke(actions.LoadData action)
         {
-            await Task.Delay(1500);
+            await Task.Delay(TimeSpan.FromSeconds(2));
             return new actions.LoadDataSuccess(new Data
             {
                 Count = DateTime.Now.Second,
