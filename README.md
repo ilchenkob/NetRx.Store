@@ -2,7 +2,7 @@
 
 State management for .Net projects, inspired by [@ngrx/store](https://github.com/ngrx/store)
 
-[![NuGet](https://img.shields.io/badge/nuget-1.3.0-blue.svg)](https://www.nuget.org/packages/NetRx.Store)
+[![NuGet](https://img.shields.io/nuget/v/NetRx.Store.svg?style=flat)](https://www.nuget.org/packages/NetRx.Store)
 
 
 ### Core concepts
@@ -170,5 +170,5 @@ Store.Create()
 
 In this case passed effects will be invoked when the corresponding action will be dispatched in the store.
 
-
+### Examples
 You can find ***sample projects*** [here](https://github.com/ilchenkob/NetRx.Store/tree/master/samples)
