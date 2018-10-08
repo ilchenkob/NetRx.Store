@@ -11,15 +11,9 @@ namespace SampleMVVM.Wpf.Models.State.Reducers
       return state;
     }
 
-    public UserState Reduce(UserState state, UserActions.LoginSuccess action)
+    public UserState Reduce(UserState state, UserActions.LoginResult action)
     {
       state.UserId = action.Payload;
-      state.IsLoading = false;
-      return state;
-    }
-
-    public UserState Reduce(UserState state, UserActions.LoginFailed action)
-    {
       state.IsLoading = false;
       return state;
     }

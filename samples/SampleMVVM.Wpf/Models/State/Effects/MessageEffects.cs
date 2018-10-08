@@ -4,27 +4,23 @@ using NetRx.Effects;
 
 namespace SampleMVVM.Wpf.Models.State.Effects
 {
-  public class SendingFailedMessageEffect : NetRx.Effects.Effect<DataActions.SendItemFailed>
+  public class SendingFailedMessageEffect : Effect<DataActions.SendItemResult>
   {
-    public override Task Invoke(SendItemFailed action)
+    public override Task Invoke(SendItemResult action)
     {
-      return App.ShowMessge("Data item sending failed", true);
+      return action.Payload.Id > 0
+        ? App.ShowMessge("Data item has been sent")
+        : App.ShowMessge("Data item sending failed", true);
     }
   }
 
-  public class DataLoadingFailedMessageEffect : NetRx.Effects.Effect<DataActions.LoadDataFailed>
+  public class DataLoadingFailedMessageEffect : Effect<DataActions.LoadDataResult>
   {
-    public override Task Invoke(LoadDataFailed action)
+    public override Task Invoke(LoadDataResult action)
     {
-      return App.ShowMessge("Loading failed", true);
-    }
-  }
-
-  public class DataLoadingSuccessMessageEffect : NetRx.Effects.Effect<DataActions.LoadDataSuccess>
-  {
-    public override Task Invoke(LoadDataSuccess action)
-    {
-      return App.ShowMessge($"Loaded {action.Payload.Count} items");
+      return action.Payload.Count > 0
+        ? App.ShowMessge($"Loaded {action.Payload.Count} items")
+        : App.ShowMessge("Loading failed", true);
     }
   }
 
@@ -35,8 +31,7 @@ namespace SampleMVVM.Wpf.Models.State.Effects
       return new Effect[]
       {
         new SendingFailedMessageEffect(),
-        new DataLoadingFailedMessageEffect(),
-        new DataLoadingSuccessMessageEffect(),
+        new DataLoadingFailedMessageEffect()
       };
     }
   }

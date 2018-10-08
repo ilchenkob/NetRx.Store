@@ -13,15 +13,9 @@ namespace SampleMVVM.Wpf.Models.State.Reducers
       return state;
     }
 
-    public DataState Reduce(DataState state, DataActions.LoadDataSuccess action)
+    public DataState Reduce(DataState state, DataActions.LoadDataResult action)
     {
       state.Items = action.Payload.ToImmutableList();
-      state.IsLoading = false;
-      return state;
-    }
-
-    public DataState Reduce(DataState state, DataActions.LoadDataFailed action)
-    {
       state.IsLoading = false;
       return state;
     }
@@ -32,15 +26,11 @@ namespace SampleMVVM.Wpf.Models.State.Reducers
       return state;
     }
 
-    public DataState Reduce(DataState state, DataActions.SendItemSuccess action)
+    public DataState Reduce(DataState state, DataActions.SendItemResult action)
     {
-      state.Items = state.Items.Remove(state.Items.First(d => d.Id == action.Payload.Id));
-      state.IsLoading = false;
-      return state;
-    }
+      if (action.Payload.Id > 0)
+        state.Items = state.Items.Remove(state.Items.First(d => d.Id == action.Payload.Id));
 
-    public DataState Reduce(DataState state, DataActions.SendItemFailed action)
-    {
       state.IsLoading = false;
       return state;
     }

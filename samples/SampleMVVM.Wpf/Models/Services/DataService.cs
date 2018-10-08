@@ -18,7 +18,7 @@ namespace SampleMVVM.Wpf.Models.Services
       return Enumerable.Range(0, now.Second)
         .Select(i => new DataItem
         {
-          Id = i,
+          Id = i + 1,
           Amount = now.Millisecond + i * 10,
           CreatedAt = now,
           Title = $"{now.Second} - {i}",

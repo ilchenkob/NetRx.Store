@@ -7,6 +7,8 @@ namespace SampleMVVM.Wpf.ViewModels
 {
   public class UserViewModel : ViewModelBase
   {
+    private bool _isLoggedIn;
+
     public UserViewModel()
     {
       SignInCommand = new RelayCommand(SignIn, CanSignIn);
@@ -14,6 +16,7 @@ namespace SampleMVVM.Wpf.ViewModels
 
       UserSelectors.Login.Subscribe(value => Login = value);
       UserSelectors.UserId.Subscribe(value => UserId = value);
+      UserSelectors.IsLoggedIn.Subscribe(value => _isLoggedIn = value);
     }
 
     public ICommand SignInCommand { get; private set; }
@@ -54,13 +57,13 @@ namespace SampleMVVM.Wpf.ViewModels
       App.Store.Dispatch(new UserActions.LoginStart(Login));
     }
 
-    private bool CanSignIn() => !string.IsNullOrWhiteSpace(Login);
+    private bool CanSignIn() => !string.IsNullOrWhiteSpace(Login) && !_isLoggedIn;
 
     private void SignOut()
     {
       App.Store.Dispatch(new UserActions.Logout());
     }
 
-    private bool CanSignOut() => UserId > 0;
+    private bool CanSignOut() => _isLoggedIn;
   }
 }

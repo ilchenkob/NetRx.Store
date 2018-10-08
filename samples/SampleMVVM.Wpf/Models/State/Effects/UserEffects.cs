@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace SampleMVVM.Wpf.Models.State.Effects
 {
-  public class LoginEffect : Effect<UserActions.LoginStart, NetRx.Store.Action>
+  public class LoginEffect : Effect<UserActions.LoginStart, UserActions.LoginResult>
   {
     private readonly IAuthService _authService;
 
@@ -13,16 +13,16 @@ namespace SampleMVVM.Wpf.Models.State.Effects
       _authService = authService;
     }
 
-    public override async Task<NetRx.Store.Action> Invoke(UserActions.LoginStart action)
+    public override async Task<UserActions.LoginResult> Invoke(UserActions.LoginStart action)
     {
       try
       {
         var result = await _authService.Login(action.Payload);
-        return new UserActions.LoginSuccess(result);
+        return new UserActions.LoginResult(result);
       }
       catch
       {
-        return new UserActions.LoginFailed();
+        return new UserActions.LoginResult(0);
       }
     }
   }

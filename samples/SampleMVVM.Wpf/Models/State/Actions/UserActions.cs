@@ -7,15 +7,11 @@
     }
   }
 
-  public class LoginSuccess : NetRx.Store.Action<int>
+  public class LoginResult : NetRx.Store.Action<int>
   {
-    public LoginSuccess(int payload) : base(payload)
+    public LoginResult(int payload) : base(payload)
     {
     }
-  }
-
-  public class LoginFailed : NetRx.Store.Action
-  {
   }
 
   public class Logout : NetRx.Store.Action

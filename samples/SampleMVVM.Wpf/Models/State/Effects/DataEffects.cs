@@ -1,10 +1,12 @@
 ﻿using System.Threading.Tasks;
 using SampleMVVM.Wpf.Models.Services;
 using NetRx.Effects;
+using System.Collections.Generic;
+using SampleMVVM.Wpf.Models.Entities;
 
 namespace SampleMVVM.Wpf.Models.State.Effects
 {
-  public class LoadDataEffect : Effect<DataActions.LoadDataStart, NetRx.Store.Action>
+  public class LoadDataEffect : Effect<DataActions.LoadDataStart, DataActions.LoadDataResult>
   {
     private readonly IDataService _dataService;
 
@@ -13,21 +15,21 @@ namespace SampleMVVM.Wpf.Models.State.Effects
       _dataService = dataService;
     }
 
-    public override async Task<NetRx.Store.Action> Invoke(DataActions.LoadDataStart action)
+    public override async Task<DataActions.LoadDataResult> Invoke(DataActions.LoadDataStart action)
     {
       try
       {
         var result = await _dataService.GetDataItems(action.Payload);
-        return new DataActions.LoadDataSuccess(result);
+        return new DataActions.LoadDataResult(result);
       }
       catch
       {
-        return new DataActions.LoadDataFailed();
+        return new DataActions.LoadDataResult(new List<DataItem>());
       }
     }
   }
 
-  public class SendItemEffect : Effect<DataActions.SendItemStart, NetRx.Store.Action>
+  public class SendItemEffect : Effect<DataActions.SendItemStart, DataActions.SendItemResult>
   {
     private readonly IDataService _dataService;
 
@@ -36,16 +38,16 @@ namespace SampleMVVM.Wpf.Models.State.Effects
       _dataService = dataService;
     }
 
-    public override async Task<NetRx.Store.Action> Invoke(DataActions.SendItemStart action)
+    public override async Task<DataActions.SendItemResult> Invoke(DataActions.SendItemStart action)
     {
       try
       {
         var result = await _dataService.SendItem(action.Payload);
-        return new DataActions.SendItemSuccess(action.Payload);
+        return new DataActions.SendItemResult(action.Payload);
       }
       catch
       {
-        return new DataActions.SendItemFailed();
+        return new DataActions.SendItemResult(new DataItem { Id = -1 });
       }
     }
   }
