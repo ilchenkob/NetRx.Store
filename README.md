@@ -2,6 +2,8 @@
 
 State management for .Net projects, inspired by [@ngrx/store](https://github.com/ngrx/store)
 
+
+[![Build status](https://ci.appveyor.com/api/projects/status/4f1pqkg8kfsuv9kr/branch/master?svg=true)](https://ci.appveyor.com/project/ilchenkob/netrx-store/branch/master)
 [![NuGet](https://img.shields.io/nuget/v/NetRx.Store.svg?style=flat)](https://www.nuget.org/packages/NetRx.Store)
 
 
