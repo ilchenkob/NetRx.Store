@@ -22,7 +22,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Store\" />
     <Folder Include="Effects\" />
     <Folder Include="Store\Exceptions\" />
   </ItemGroup>

@@ -8,7 +8,7 @@ using NetRx.Store.Exceptions;
 
 namespace NetRx.Store
 {
-    public sealed class Store : BlankStore
+    public sealed class Store : BlankStore, IStore
     {
         internal Store()
         {

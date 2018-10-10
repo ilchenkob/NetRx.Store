@@ -18,9 +18,9 @@ namespace NetRx.Store.Tests
             return store.GetType().GetInstanceField<IEnumerable<object>>(store, "_items");
         }
 
-        public static IDictionary<string, IList<object>> GetStoreEffects(this Store store)
+        public static dynamic GetStoreEffects(this Store store)
         {
-            return store.GetType().GetInstanceField<IDictionary<string, IList<object>>>(store, "_effects");
+            return store.GetType().GetInstanceField<dynamic>(store, "_effects");
         }
 
         private static BindingFlags BindingFlags

@@ -3,13 +3,16 @@ using Xunit;
 using NetRx.Store.Exceptions;
 using NetRx.Store.Tests.State;
 using NetRx.Store.Tests.State.Reducers;
+using NetRx.Effects;
+using NetRx.Store.Tests.State.Effects;
+using NetRx.Store.Tests.State.TestStateActions;
 
 namespace NetRx.Store.Tests
 {
     public class StoreTest
     {
         [Fact]
-        public void StoreWithState_Should_Throw_InvalidStateTypeException_When_Reference_state_type_passed()
+        public void WithState_Should_Throw_InvalidStateTypeException_When_Reference_state_type_passed()
         {
             var exception = Record.Exception(
                 () => Store.Create().WithState(new InvalidTypeState(), new InvalidTypeStateReducer())
@@ -21,7 +24,7 @@ namespace NetRx.Store.Tests
         }
 
         [Fact]
-        public void StoreWithState_Should_Throw_InvalidStatePropertyTypeException_When_Reference_property_type_passed()
+        public void WithState_Should_Throw_InvalidStatePropertyTypeException_When_Reference_property_type_passed()
         {
             var exception = Record.Exception(
                 () => Store.Create().WithState(new InvalidPropertyTypeState(), new InvalidPropertyTypeStateReducer())
@@ -33,7 +36,7 @@ namespace NetRx.Store.Tests
         }
 
         [Fact]
-        public void StoreWithState_Should_Throw_InvalidStatePropertyTypeException_When_not_Immutable_collection_passed()
+        public void WithState_Should_Throw_InvalidStatePropertyTypeException_When_not_Immutable_collection_passed()
         {
             var exception = Record.Exception(
                 () => Store.Create().WithState(new InvalidListPropertyTypeState(), new InvalidListPropertyTypeStateReducer())
@@ -45,7 +48,7 @@ namespace NetRx.Store.Tests
         }
 
         [Fact]
-        public void StoreWithState_Should_Throw_InvalidStatePropertyTypeException_When_Reference_type_passed_as_collection_generic_type()
+        public void WithState_Should_Throw_InvalidStatePropertyTypeException_When_Reference_type_passed_as_collection_generic_type()
         {
             var exception = Record.Exception(
                 () => Store.Create().WithState(new InvalidCollectionItemTypeState(), new InvalidCollectionItemTypeStateReducer())
