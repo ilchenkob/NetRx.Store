@@ -47,9 +47,10 @@ namespace NetRx.Store
 
         private void BuildGetters(Type type, string prefix)
         {
+            var stringType = typeof(string);
             foreach (var p in type.GetProperties(BindingFlags.Instance | BindingFlags.Public))
             {
-                var isString = p.PropertyType == typeof(string);
+                var isString = p.PropertyType == stringType;
                 var isEnumerable = p.PropertyType.GetInterface(typeof(IEnumerable<>).FullName) != null && !isString;
                 if (isEnumerable)
                 {
@@ -60,7 +61,7 @@ namespace NetRx.Store
                         throw new InvalidStatePropertyTypeException(
                             $"'{p.Name}': only types from 'System.Collections.Immutable' namespace are allowed for collections");
 
-                    var nonValueType = p.PropertyType.GenericTypeArguments.FirstOrDefault(a => !a.IsValueType);
+                    var nonValueType = p.PropertyType.GenericTypeArguments.FirstOrDefault(a => !a.IsValueType && a != stringType);
                     if (nonValueType != null)
                         throw new InvalidStatePropertyTypeException(
                             $"'{p.Name}' cannot have reference type '{nonValueType.FullName}'. Should have 'struct' type");
@@ -69,7 +70,7 @@ namespace NetRx.Store
                           !isString &&
                           !isEnumerable)
                 {
-                    throw new InvalidStatePropertyTypeException($"'{p.PropertyType.FullName}' cannot have reference type. Should have 'struct' type");
+                    throw new InvalidStatePropertyTypeException($"'{p.Name}' property of {prefix} cannot have reference type. Should have 'struct' type");
                 }
 
                 var wrappedObjectParameter = Expression.Parameter(typeof(object));
