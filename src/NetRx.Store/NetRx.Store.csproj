@@ -4,7 +4,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>NetRx</RootNamespace>
     <PackageId>NetRx.Store</PackageId>
-    <Version>1.3.0</Version>
+    <Version>1.3.1</Version>
     <Authors>Vitalii Ilchenko</Authors>
     <Description>State management for .Net projects, inspired by @ngrx/store</Description>
     <RepositoryUrl>https://github.com/ilchenkob/NetRx.Store</RepositoryUrl>

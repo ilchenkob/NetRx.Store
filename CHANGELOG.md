@@ -1,6 +1,10 @@
 ## Changelog
 All notable changes to this project will be documented in this file.
 
+#### 1.3.1 - 2018-10-10
+##### Fixed
+* Ability to create a string collection as a state field.
+
 #### 1.3.0 - 2018-10-08
 ##### Added
 * Internal wrappers for Reducer, Subscription and Effect. It slightly slows down the store initialization time. But at the same time gives significant improvement in Reducer and Effect invocations and their execution takes much less time.
