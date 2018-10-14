@@ -32,6 +32,32 @@ namespace SampleEffects.State.Reducers
                 Category = string.Empty
             }
         };
+
+        public static Func<AppState, NetRx.Store.Action, AppState> Reducer = (state, action) =>
+        {
+            if (action is actions.SetIsLoading setIsLoading)
+            {
+                state.IsLoading = setIsLoading.Payload;
+                return state;
+            }
+            if (action is actions.SetUsername setUsername)
+            {
+                state.Username = setUsername.Payload;
+                return state;
+            }
+            if (action is actions.LoadData)
+            {
+                state.IsLoading = true;
+                return state;
+            }
+            if (action is actions.LoadDataSuccess loadDataSuccess)
+            {
+                state.IsLoading = false;
+                state.Data = loadDataSuccess.Payload;
+                return state;
+            }
+            return state;
+        };
     }
 
     public class AppReducer : Reducer<AppState>

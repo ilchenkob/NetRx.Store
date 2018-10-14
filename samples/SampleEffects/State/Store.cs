@@ -12,7 +12,9 @@ namespace SampleEffects.State
         static Store()
         {
             Instance = NetRxStore.Create()
-                                 .WithState(AppState.Initial, new AppReducer())
+                                 .WithState(AppState.Initial, AppState.Reducer)
+                                 // or
+                                 // .WithState(AppState.Initial, new AppReducer())
                                  .WithEffects(new Effect[] { new LoadDataEffect(), new UsernameChangedEffect() });
         }
     }

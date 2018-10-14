@@ -20,6 +20,35 @@ namespace SampleState.State.Reducers
         public ImmutableList<Contact> Contacts { get; set; }
     }
 
+    public class ProfileReducerFunc
+    {
+        public ProfileState Reduce(ProfileState state, Action action)
+        {
+            if (action is actions.SetEmail setEmail)
+            {
+                state.Email = setEmail.Payload;
+                return state;
+            }
+            if (action is actions.SetName setName)
+            {
+                state.Name = setName.Payload;
+                return state;
+            }
+            if (action is actions.AddContact addContact)
+            {
+                state.Contacts = state.Contacts.Add(addContact.Payload);
+                return state;
+            }
+            if (action is actions.ClearContacts)
+            {
+                state.Contacts = state.Contacts.Clear();
+                return state;
+            }
+
+            return state;
+        }
+    }
+
     public class ProfileReducer : Reducer<ProfileState>
     {
         public ProfileState Reduce(ProfileState state, actions.SetEmail action)

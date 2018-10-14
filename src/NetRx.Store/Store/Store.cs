@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using NetRx.Effects;
-using NetRx.Store.Exceptions;
 
 namespace NetRx.Store
 {
@@ -29,31 +28,29 @@ namespace NetRx.Store
         /// <typeparam name="TState">State type</typeparam>
         public new Store WithState<TState, TReducer>(TState initialState, TReducer reducer) where TReducer : Reducer<TState>
         {
-            try
-            {
-                return new Store
-                {
-                    _items = this._items
-                                 .Concat(new List<StoreItem>
-                                 {
-                                    new StoreItem(
-                                        StateWrapper.ForObject(() => initialState),
-                                        ReducerWrapper.ForObject<TState, TReducer>(reducer)
-                                    )
-                                 })
-                                 .ToList(),
-                    _subscriptions = new ConcurrentDictionary<string, ISubscription>(this._subscriptions),
-                    _effects = new Dictionary<string, IList<IEffectMethodWrapper>>(this._effects)
-                };
-            }
-            catch (InvalidStateTypeException stateTypeException)
-            {
-                throw new InvalidStateTypeException(stateTypeException.Message);
-            }
-            catch (InvalidStatePropertyTypeException propTypeException)
-            {
-                throw new InvalidStatePropertyTypeException(propTypeException.Message);
-            }
+            return TryCreateStore(() => WithState(
+                new StoreItem(
+                        StateWrapper.ForObject(() => initialState),
+                        ReducerWrapper.ForObject<TState, TReducer>(reducer))
+                )
+            );
+        }
+
+        /// <summary>
+        /// Adds state to the store
+        /// </summary>
+        /// <returns>Store that inludes passed state and reducer</returns>
+        /// <param name="initialState">Initial state value</param>
+        /// <param name="reducer">Reducer function</param>
+        /// <typeparam name="TState">State type</typeparam>
+        public new Store WithState<TState>(TState initialState, Func<TState, Action, TState> reducer)
+        {
+            return TryCreateStore(() => WithState(
+                new StoreItem<TState>(
+                        StateWrapper.ForObject(() => initialState),
+                        reducer)
+                )
+            );
         }
 
         /// <summary>
@@ -138,13 +135,13 @@ namespace NetRx.Store
         {
             var actionTypeName = typeof(T).FullName;
 
-            var modifiedStates = new List<(string stateName, StateWrapper pervState)>();
+            var modifiedStates = new List<(string, StateWrapper)>();
             foreach (var item in _items)
             {
-                if (item.Reducer.CanHandle(actionTypeName))
+                var prevValue = item.State;
+                var newValue = item.Dispatch(action, actionTypeName);
+                if (newValue != null)
                 {
-                    var prevValue = item.State;
-                    var newValue = item.Reducer.Invoke(actionTypeName, item.State.Original, action);
                     item.State = new StateWrapper(newValue, item.State.OriginalTypeName);
                     modifiedStates.Add((item.State.OriginalTypeName, prevValue));
                 }
@@ -196,6 +193,16 @@ namespace NetRx.Store
             {
                 _subscriptions[field].OnNext(wrappedState.Get(field));
             }
+        }
+
+        private Store WithState(StoreItem item)
+        {
+            return new Store
+            {
+                _items = this._items.Concat(new List<StoreItem> { item }).ToList(),
+                _subscriptions = new ConcurrentDictionary<string, ISubscription>(this._subscriptions),
+                _effects = new Dictionary<string, IList<IEffectMethodWrapper>>(this._effects)
+            };
         }
     }
 }

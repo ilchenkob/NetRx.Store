@@ -1,6 +1,10 @@
 ## Changelog
 All notable changes to this project will be documented in this file.
 
+#### 1.4 - 2018-10-15
+##### Added
+* Support of the pure function as a reducer. Previously, ```WithState``` method supported only the class inherited from ```NetRx.Store.Reducer``` as a reducer. But now there is one more override of this method that supports ```Func<TState, Action, TState>``` as a reducer.
+
 #### 1.3.1 - 2018-10-10
 ##### Fixed
 * Ability to create a string collection as a state field.

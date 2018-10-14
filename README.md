@@ -57,7 +57,41 @@ public class SetIsLoading : NetRx.Store.Action<bool>
 
 #### Reducer
 
-User defined reducers should be inherited from ```Reducer<TState>``` class defined in ```NetRx.Store``` namespace. Reducer should have a set of methods with the following syntax:
+There are two options how you can define reducers for your states:
+
+1. You can use a pure function with the following syntax: ```Func<ProfileState, Action, ProfileState>```.
+
+Example:
+
+```csharp
+Func<ProfileState, Action, ProfileState> reducer = (state, action) =>
+{
+    if (action is actions.SetEmail setEmail)
+    {
+        state.Email = setEmail.Payload;
+        return state;
+    }
+    if (action is actions.SetName setName)
+    {
+        state.Name = setName.Payload;
+        return state;
+    }
+    if (action is actions.AddContact addContact)
+    {
+        state.Contacts = state.Contacts.Add(addContact.Payload);
+        return state;
+    }
+    if (action is actions.ClearContacts)
+    {
+        state.Contacts = state.Contacts.Clear();
+        return state;
+    }
+
+    return state;
+}
+```
+
+2. You can define reducer as a class (then it needs to be inherited from ```NetRx.Store.Reducer<TState>```). Reducer class should have a set of methods with the following syntax:
 
 ```public TSate Reduce(TState state, TAction action)```
 

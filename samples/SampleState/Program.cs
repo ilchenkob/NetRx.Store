@@ -17,7 +17,11 @@ namespace SampleState
                 Contacts = ImmutableList.Create<Contact>()
             };
 
-            var store = Store.Create().WithState(initialState, new ProfileReducer());
+            // Option 1:
+            var store = Store.Create().WithState(initialState, new ProfileReducerFunc().Reduce);
+
+            // Option 2:
+            //var store = Store.Create().WithState(initialState, new ProfileReducer());
 
             store.Select<ProfileState, string>(state => state.Name).Subscribe(value =>
             {
