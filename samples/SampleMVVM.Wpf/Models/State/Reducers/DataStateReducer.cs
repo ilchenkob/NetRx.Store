@@ -5,39 +5,39 @@ using System.Linq;
 
 namespace SampleMVVM.Wpf.Models.State.Reducers
 {
-  public class DataStateReducer : Reducer<DataState>
+  public class DataStateReducer
   {
-    public DataState Reduce(DataState state, DataActions.LoadDataStart action)
+    public static DataState Function(DataState state, Action action)
     {
-      state.IsLoading = true;
-      return state;
-    }
+      if (action is DataActions.LoadDataStart)
+      {
+        state.IsLoading = true;
+        return state;
+      }
+      if (action is DataActions.LoadDataResult loadResult)
+      {
+        state.Items = loadResult.Payload.ToImmutableList();
+        state.IsLoading = false;
+        return state;
+      }
+      if (action is DataActions.SendItemStart)
+      {
+        state.IsLoading = true;
+        return state;
+      }
+      if (action is DataActions.SendItemResult sendResult)
+      {
+        if (sendResult.Payload.Id > 0)
+          state.Items = state.Items.Remove(state.Items.First(d => d.Id == sendResult.Payload.Id));
 
-    public DataState Reduce(DataState state, DataActions.LoadDataResult action)
-    {
-      state.Items = action.Payload.ToImmutableList();
-      state.IsLoading = false;
-      return state;
-    }
-
-    public DataState Reduce(DataState state, DataActions.SendItemStart action)
-    {
-      state.IsLoading = true;
-      return state;
-    }
-
-    public DataState Reduce(DataState state, DataActions.SendItemResult action)
-    {
-      if (action.Payload.Id > 0)
-        state.Items = state.Items.Remove(state.Items.First(d => d.Id == action.Payload.Id));
-
-      state.IsLoading = false;
-      return state;
-    }
-
-    public DataState Reduce(DataState state, UserActions.Logout action)
-    {
-      state.Items = state.Items.Clear();
+        state.IsLoading = false;
+        return state;
+      }
+      if (action is UserActions.Logout)
+      {
+        state.Items = state.Items.Clear();
+        return state;
+      }
       return state;
     }
   }

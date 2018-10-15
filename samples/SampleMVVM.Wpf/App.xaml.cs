@@ -26,7 +26,7 @@ namespace SampleMVVM.Wpf
                               .Concat(MessageEffects.GetAll());
 
       Store = Store.Create()
-                   .WithState(DataState.Initial(), new DataStateReducer())
+                   .WithState(DataState.Initial(), DataStateReducer.Function)
                    .WithState(UserState.Initial(), new UserStateReducer())
                    .WithEffects(effects);
     }
