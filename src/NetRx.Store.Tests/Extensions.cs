@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NetRx.Effects;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
@@ -13,14 +14,14 @@ namespace NetRx.Store.Tests
             return (T)field.GetValue(instance);
         }
 
-        public static IEnumerable<object> GetStoreItems(this Store store)
+        internal static IEnumerable<StoreItem> GetStoreItems(this Store store)
         {
-            return store.GetType().GetInstanceField<IEnumerable<object>>(store, "_items");
+            return store.GetType().GetInstanceField<IEnumerable<StoreItem>>(store, "_items");
         }
 
-        public static dynamic GetStoreEffects(this Store store)
+        internal static Dictionary<string, IList<IEffectMethodWrapper>> GetStoreEffects(this Store store)
         {
-            return store.GetType().GetInstanceField<dynamic>(store, "_effects");
+            return store.GetType().GetInstanceField<Dictionary<string, IList<IEffectMethodWrapper>>>(store, "_effects");
         }
 
         private static BindingFlags BindingFlags
