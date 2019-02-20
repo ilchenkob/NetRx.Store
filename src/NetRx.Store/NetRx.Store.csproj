@@ -4,15 +4,19 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>NetRx</RootNamespace>
     <PackageId>NetRx.Store</PackageId>
-    <Version>1.4.0</Version>
+    <Version>1.4.1</Version>
     <Authors>Vitalii Ilchenko</Authors>
     <Description>State management for .Net projects, inspired by @ngrx/store</Description>
     <RepositoryUrl>https://github.com/ilchenkob/NetRx.Store</RepositoryUrl>
-    <PackageTags>store;reactive;state;management</PackageTags>
+    <PackageTags>store;reactive;state;management;flux;redux;blazor;uwp;wpf;xamarin</PackageTags>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackOnBuild>true</PackOnBuild>
     <Summary>State management for .Net projects, inspired by @ngrx/store</Summary>
     <Title>NetRx.Store</Title>
+  </PropertyGroup>
+  
+  <PropertyGroup>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
 
   <ItemGroup>
