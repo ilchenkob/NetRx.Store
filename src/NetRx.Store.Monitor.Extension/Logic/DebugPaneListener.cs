@@ -31,7 +31,7 @@ namespace NetRx.Store.Monitor.Logic
             _outputWindowEvents.PaneUpdated -= onPaneUpdated;
         }
 
-        public Action<Message> HandleUpdate { get; set; }
+        public Action<TraceMessage> HandleUpdate { get; set; }
 
         private void onPaneUpdated(OutputWindowPane pane)
         {
@@ -39,10 +39,15 @@ namespace NetRx.Store.Monitor.Logic
 
             if (pane.Name == TargetPaneName)
             {
-                var lastLine = _parser.GetLastLine(pane.TextDocument);
-                if (!string.IsNullOrWhiteSpace(lastLine) && lastLine.StartsWith(MonitorConstants.Message.Tag))
+                var lastLines = _parser.GetLastLines(pane.TextDocument);
+                foreach (var line in lastLines)
                 {
-                    HandleUpdate?.Invoke(MessageConverter.Deserialize(lastLine));
+                    if (!string.IsNullOrWhiteSpace(line) && line.StartsWith(MonitorConstants.Message.Tag))
+                    {
+                        var message = TraceMessageSerializer.Deserialize(line.TrimEnd());
+                        if (message != null)
+                            HandleUpdate?.Invoke(message);
+                    }
                 }
             }
         }

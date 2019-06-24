@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Linq.Expressions;
-using System.Threading.Tasks;
-using Action = NetRx.Store.Action;
 
-namespace NetRx.Effects
+namespace NetRx.Store.Effects
 {
     internal abstract class EffectWrapper
     {
-        public static IEffectMethodWrapper FromObject(Store.Store store, Effect effect)
+        public static IEffectMethodWrapper FromObject(Store store, Effect effect)
         {
             var effectType = effect.GetType();
             var effectTypeGenericArguments = effectType.BaseType.GenericTypeArguments;

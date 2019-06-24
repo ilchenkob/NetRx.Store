@@ -1,8 +1,8 @@
 ﻿namespace NetRx.Store.Monitor.Shared.Models
 {
-    public class Message
+    public class TraceMessage
     {
-        public string StateTypeName { get; set; }
+        public string StoreTypeName { get; set; }
 
         public string ActionTypeName { get; set; }
 

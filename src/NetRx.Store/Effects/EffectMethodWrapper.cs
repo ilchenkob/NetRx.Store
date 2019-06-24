@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Action = NetRx.Store.Action;
 
-namespace NetRx.Effects
+namespace NetRx.Store.Effects
 {
     internal interface IEffectMethodWrapper
     {
@@ -32,7 +31,7 @@ namespace NetRx.Effects
             where TOutputAction : Action
     {
         private readonly Func<TInputAction, Task<TOutputAction>> _func;
-        private readonly NetRx.Store.Store _store;
+        private readonly Store _store;
 
         public EffectMethodWrapper(string actionTypeName, Delegate del, NetRx.Store.Store store)
         {

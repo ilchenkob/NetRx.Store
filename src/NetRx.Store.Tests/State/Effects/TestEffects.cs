@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.Immutable;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using NetRx.Effects;
+using NetRx.Store.Effects;
 
 namespace NetRx.Store.Tests.State.Effects
 {

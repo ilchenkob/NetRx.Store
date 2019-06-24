@@ -1,7 +1,6 @@
 ﻿using System.Threading.Tasks;
-using Action = NetRx.Store.Action;
 
-namespace NetRx.Effects
+namespace NetRx.Store.Effects
 {
     public abstract class Effect
     {
