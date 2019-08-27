@@ -1,4 +1,4 @@
-﻿using NetRx.Effects;
+﻿using NetRx.Store.Effects;
 using SampleMVVM.Wpf.Models.Services;
 using System.Threading.Tasks;
 

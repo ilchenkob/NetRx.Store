@@ -10,7 +10,7 @@
     [Guid("680bdfa0-4831-42aa-82a5-931619a034e5")]
     public class MonitorToolWindow : ToolWindowPane
     {
-        private EnvDTE.Events _ideEvents;
+        private EnvDTE.DebuggerEvents _debuggerEvents;
         private DebugPaneListener _debugPaneListener;
         private MonitorToolViewModel _monitorToolViewModel;
 
@@ -25,15 +25,16 @@
 
             ThreadHelper.ThrowIfNotOnUIThread();
 
-            _ideEvents = MonitorToolWindowCommand.Instance.Ide.Events;
-            _ideEvents.DebuggerEvents.OnEnterDesignMode += OnExitDebuggerMode;
+            _debuggerEvents = MonitorToolWindowCommand.Instance.Ide.Events.DebuggerEvents;
+            _debuggerEvents.OnEnterDesignMode += OnExitDebuggerMode;
 
-            _debugPaneListener = new DebugPaneListener(_ideEvents.OutputWindowEvents, new OutputPaneParser());
-            _debugPaneListener.HandleUpdate = message => _monitorToolViewModel.AddStateRecord(message);
+            _debugPaneListener = new DebugPaneListener(
+                MonitorToolWindowCommand.Instance.Ide.Events.OutputWindowEvents,
+                new OutputPaneParser())
+            {
+                HandleUpdate = message => _monitorToolViewModel.AddStateRecord(message)
+            };
 
-            // This is the user control hosted by the tool window; Note that, even if this class implements IDisposable,
-            // we are not calling Dispose on this object. This is because ToolWindowPane calls Dispose on
-            // the object returned by the Content property.
             this.Content = new MonitorToolWindowControl(_monitorToolViewModel);
         }
 
@@ -45,9 +46,7 @@
         protected override void Dispose(bool disposing)
         {
             _debugPaneListener.Dispose();
-
-            ThreadHelper.ThrowIfNotOnUIThread();
-            _ideEvents.DebuggerEvents.OnEnterDesignMode -= OnExitDebuggerMode;
+            _debuggerEvents.OnEnterDesignMode -= OnExitDebuggerMode;
 
             base.Dispose(disposing);
         }

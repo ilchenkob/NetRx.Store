@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using NetRx.Effects;
+using NetRx.Store.Effects;
 using actions = SampleEffects.State.Actions;
 
 namespace SampleEffects.State.Effects

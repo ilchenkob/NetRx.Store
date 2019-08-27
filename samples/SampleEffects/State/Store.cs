@@ -1,7 +1,7 @@
 ﻿using SampleEffects.State.Reducers;
 using SampleEffects.State.Effects;
 using NetRxStore = NetRx.Store.Store;
-using NetRx.Effects;
+using NetRx.Store.Effects;
 
 namespace SampleEffects.State
 {

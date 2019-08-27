@@ -18,6 +18,8 @@ Core principles are the same as in @ngrx/store:
 
 ### Overview
 
+**[NetRx.Store Monitor](https://marketplace.visualstudio.com/items?itemName=VitaliiIlchenko.netrx-store-monitor) is the new extension for Visual Studio. It will help you to debug your app which uses NetRx.Store.**
+
 #### State
 
 State cannot have reference type, it should be struct and can have properties of following types: simple type (```bool```, ```int```, ```double```, ```string```, etc), collection type from ```System.Collections.Immutable``` namespace or user defined ```struct```.

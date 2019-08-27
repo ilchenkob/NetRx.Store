@@ -63,7 +63,7 @@ namespace NetRx.Store.Monitor.Extension.Logic.ViewModels
         {
             var record = new HistoryRecordViewModel(actionName, stateValueJson);
             _allActions.Add(record);
-            if (!string.IsNullOrWhiteSpace(ActionFilter) && record.ActionName.Contains(ActionFilter)
+            if (!string.IsNullOrWhiteSpace(ActionFilter) && record.ActionName.ToLower().Contains(ActionFilter)
                 || string.IsNullOrWhiteSpace(ActionFilter))
             {
                 FilteredActions.Add(record);
@@ -74,7 +74,7 @@ namespace NetRx.Store.Monitor.Extension.Logic.ViewModels
         {
             var records = string.IsNullOrWhiteSpace(ActionFilter)
                 ? _allActions
-                : _allActions.Where(r => r.ActionName.Contains(ActionFilter));
+                : _allActions.Where(r => r.ActionName.ToLower().Contains(ActionFilter));
 
             FilteredActions.Clear();
             foreach (var record in records)

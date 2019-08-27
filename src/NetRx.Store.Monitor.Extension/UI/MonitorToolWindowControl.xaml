@@ -18,113 +18,110 @@
         <converters:BoolToInvertVisibilityConverter x:Key="BoolToInvertVisibilityConverter"/>
     </UserControl.Resources>
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="5*" MinWidth="120"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="8*" MinWidth="120"/>
+        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <StackPanel Orientation="Horizontal"
-                    Height="42" Grid.Row="0" Grid.ColumnSpan="3">
-            <Label Content="Store"
-                   Margin="8"
+        <Grid Height="34" Grid.Row="0" Grid.Column="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="56"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Label Grid.Column="0" Content="Store" Margin="8,2"
                    Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ThemedDialogLabelStyleKey}}"/>
-            <ComboBox Width="150"
-                      Margin="8"
+            <ComboBox Grid.Column="1"
+                      Margin="0, 4"
                       ItemsSource="{Binding StoreHistories}"
                       DisplayMemberPath="Name"
                       SelectedValuePath="Name"
                       Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ComboBoxStyleKey}}"
                       SelectedItem="{Binding SelectedStoreHistory, Mode=TwoWay}" />
-        </StackPanel>
-        <Grid Grid.Row="1" DataContext="{Binding SelectedStoreHistory}">
+        </Grid>
+        <Grid Height="34" Grid.Row="1" Grid.Column="0" Margin="0,0,0,4"
+              DataContext="{Binding SelectedStoreHistory}">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="5*"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="8*"/>
+                <ColumnDefinition Width="56"/>
+                <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-            <Grid Margin="0,0,0,4">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
-                <TextBox Grid.Column="0"
-                         VerticalAlignment="Center"
-                         ToolTip="Filter by action name"
-                         Padding="6,4"
-                         Style="{DynamicResource {x:Static vsshell:VsResourceKeys.TextBoxStyleKey}}"
-                         Text="{Binding ActionFilter, Mode=TwoWay}"/>
-                <Button Grid.Column="1" Content="Filter"
-                        Command="{Binding ApplyFilterCommand}"
-                        Padding="6,4"
-                        Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ButtonStyleKey}}"/>
-            </Grid>
-            <ListView Grid.Column="0" Grid.Row="1"
-                      ItemsSource="{Binding FilteredActions}"
-                      SelectedItem="{Binding SelectedHistoryRecord, Mode=TwoWay}"
-                      BorderThickness="1"
-                      Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ThemedDialogListViewStyleKey}}">
-                <ListView.ItemContainerStyle>
-                    <Style TargetType="{x:Type ListViewItem}">
-                        <Setter Property="HorizontalAlignment" Value="Stretch"/>
-                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                        <Setter Property="ToolTip" Value="{Binding ActionFullName}" />
-                    </Style>
-                </ListView.ItemContainerStyle>
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <Grid Margin="4">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="2*"/>
-                                <ColumnDefinition Width="16"/>
-                                <ColumnDefinition Width="1*"/>
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Grid.Column="0"
+            <Label Grid.Column="0" Content="Filter " Margin="8,2"
+                   Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ThemedDialogLabelStyleKey}}"/>
+            <TextBox x:Name="FilterTextBox" Grid.Column="1"
+                    VerticalAlignment="Center"
+                    ToolTip="Filter actions by name"
+                    Padding="6,4"
+                    Style="{DynamicResource {x:Static vsshell:VsResourceKeys.TextBoxStyleKey}}"/>
+        </Grid>
+        <ListView Grid.Column="0" Grid.Row="2"
+                DataContext="{Binding SelectedStoreHistory}"
+                ItemsSource="{Binding FilteredActions}"
+                SelectedItem="{Binding SelectedHistoryRecord, Mode=TwoWay}"
+                BorderThickness="1"
+                Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ThemedDialogListViewStyleKey}}">
+            <ListView.ItemContainerStyle>
+                <Style TargetType="{x:Type ListViewItem}">
+                    <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                    <Setter Property="ToolTip" Value="{Binding ActionFullName}" />
+                </Style>
+            </ListView.ItemContainerStyle>
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Grid Margin="4">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="16"/>
+                            <ColumnDefinition Width="1*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0"
                                     Text="{Binding ActionName}"
                                     TextAlignment="Left"
                                     TextTrimming="CharacterEllipsis"
                                     Foreground="{DynamicResource TextBrush}"/>
-                            <TextBlock Grid.Column="2"
+                        <TextBlock Grid.Column="2"
                                     Text="{Binding ReceivedAt}"
                                     TextAlignment="Right"
                                     Foreground="{DynamicResource TextBrush}"/>
-                        </Grid>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
-            <GridSplitter Grid.Column="1" Grid.RowSpan="2"
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        <GridSplitter Grid.Column="1" Grid.RowSpan="3"
                           Width="5"
                           Background="{DynamicResource {x:Static vsshell:VsBrushes.ComboBoxPopupBackgroundGradientKey}}"
                           HorizontalAlignment="Center"
                           VerticalAlignment="Stretch"/>
-            <TreeView Grid.RowSpan="2" Grid.Column="2"
-                      ItemsSource="{Binding State}"
-                      BorderThickness="1"
-                      Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ThemedDialogTreeViewStyleKey}}">
-                <TreeView.ItemContainerStyle>
-                    <Style TargetType="{x:Type TreeViewItem}">
-                        <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
-                        <Setter Property="BorderThickness" Value="0"/>
-                        <Setter Property="Focusable" Value="False" />
-                        <Setter Property="IsSelected" Value="False" />
-                    </Style>
-                </TreeView.ItemContainerStyle>
-                <TreeView.ItemTemplate>
-                    <HierarchicalDataTemplate ItemsSource="{Binding Childs}">
-                        <StackPanel Orientation="Horizontal">
-                            <Label Content="{Binding Name}"
+        <TreeView Grid.RowSpan="3" Grid.Column="2"
+                  DataContext="{Binding SelectedStoreHistory}"
+                  ItemsSource="{Binding State}"
+                  BorderThickness="1"
+                  Style="{DynamicResource {x:Static vsshell:VsResourceKeys.ThemedDialogTreeViewStyleKey}}">
+            <TreeView.ItemContainerStyle>
+                <Style TargetType="{x:Type TreeViewItem}">
+                    <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
+                    <Setter Property="BorderThickness" Value="0"/>
+                    <Setter Property="Focusable" Value="False" />
+                    <Setter Property="IsSelected" Value="False" />
+                </Style>
+            </TreeView.ItemContainerStyle>
+            <TreeView.ItemTemplate>
+                <HierarchicalDataTemplate ItemsSource="{Binding Childs}">
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="{Binding Name}"
                                    Foreground="{DynamicResource TextBrush}"/>
-                            <Label Content=" :  "
+                        <Label Content=" :  "
                                    Foreground="{DynamicResource TextBrush}"/>
-                            <Label Content="{Binding Value}"
+                        <Label Content="{Binding Value}"
                                    Foreground="{DynamicResource TextBrush}"
                                    Visibility="{Binding IsExpanded, Converter={StaticResource BoolToInvertVisibilityConverter}}"/>
-                        </StackPanel>
-                    </HierarchicalDataTemplate>
-                </TreeView.ItemTemplate>
-            </TreeView>
-        </Grid>
+                    </StackPanel>
+                </HierarchicalDataTemplate>
+            </TreeView.ItemTemplate>
+        </TreeView>
     </Grid>
 </UserControl>

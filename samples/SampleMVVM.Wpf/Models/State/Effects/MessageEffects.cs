@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 using SampleMVVM.Wpf.Models.State.DataActions;
-using NetRx.Effects;
+using NetRx.Store.Effects;
 
 namespace SampleMVVM.Wpf.Models.State.Effects
 {

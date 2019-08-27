@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("NetRx.Store.Monitor.Extension")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Vitalii Ilchenko")]
 [assembly: AssemblyProduct("NetRx.Store.Monitor.Extension")]
 [assembly: AssemblyCopyright("")]
 [assembly: AssemblyTrademark("")]
