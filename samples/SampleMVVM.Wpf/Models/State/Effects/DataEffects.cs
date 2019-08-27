@@ -1,8 +1,8 @@
 ﻿using System.Threading.Tasks;
 using SampleMVVM.Wpf.Models.Services;
-using NetRx.Effects;
 using System.Collections.Generic;
 using SampleMVVM.Wpf.Models.Entities;
+using NetRx.Store.Effects;
 
 namespace SampleMVVM.Wpf.Models.State.Effects
 {

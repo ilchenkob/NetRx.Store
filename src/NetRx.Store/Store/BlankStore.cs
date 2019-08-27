@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using NetRx.Effects;
+using NetRx.Store.Diagnostic;
+using NetRx.Store.Effects;
 using NetRx.Store.Exceptions;
 
 namespace NetRx.Store

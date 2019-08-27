@@ -1,7 +1,17 @@
 ## Changelog
 All notable changes to this project will be documented in this file.
 
-#### 1.4 - 2018-10-15
+#### 2.0.0 - 2019-08-27
+##### Fixed
+* Action dispatching behavior: effects will be triggered only when all reducers have been called.
+
+##### Added
+* Support of an extension for Visual Studio which is called 'NetRx.Store Monitor' and is available at Visual Studio Marketplace.
+
+##### Changed
+* Effects namespace: all effects classes have been moved to `NetRx.Store.Effects` namespace (in prev. versions they were located in `NetRx.Effects`).
+
+#### 1.4.0 - 2018-10-15
 ##### Added
 * Support of a pure function as a reducer. Previously, ```WithState``` method supported only the class inherited from ```NetRx.Store.Reducer``` as a reducer. But now there is one more override of this method that supports ```Func<TState, Action, TState>``` as a reducer.
 

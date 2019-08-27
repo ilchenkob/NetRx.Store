@@ -5,7 +5,15 @@ VisualStudioVersion = 15.0.27703.2042
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetRx.Store", "NetRx.Store\NetRx.Store.csproj", "{A6315850-7D4E-4BA5-A643-3BE4B645B928}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetRx.Store.Tests", "NetRx.Store.Tests\NetRx.Store.Tests.csproj", "{2FB873CA-3709-4C42-A565-56F7B71A1211}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetRx.Store.Tests", "NetRx.Store.Tests\NetRx.Store.Tests.csproj", "{2FB873CA-3709-4C42-A565-56F7B71A1211}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetRx.Store.Monitor.Shared", "NetRx.Store.Monitor.Shared\NetRx.Store.Monitor.Shared.csproj", "{76053ACD-EC86-49EA-92EA-18501DAAB7F1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetRx.Store.Monitor.Extension", "NetRx.Store.Monitor.Extension\NetRx.Store.Monitor.Extension.csproj", "{28C87D13-AEC6-4C34-A500-67FF8DAAF261}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Package", "Package", "{B1568EAE-835F-4052-B1E4-79DB6ABBC0FC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{98F39D90-94C6-4E01-BCFC-D3A1DAB74506}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,9 +29,23 @@ Global
 		{2FB873CA-3709-4C42-A565-56F7B71A1211}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2FB873CA-3709-4C42-A565-56F7B71A1211}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2FB873CA-3709-4C42-A565-56F7B71A1211}.Release|Any CPU.Build.0 = Release|Any CPU
+		{76053ACD-EC86-49EA-92EA-18501DAAB7F1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{76053ACD-EC86-49EA-92EA-18501DAAB7F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{76053ACD-EC86-49EA-92EA-18501DAAB7F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{76053ACD-EC86-49EA-92EA-18501DAAB7F1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{28C87D13-AEC6-4C34-A500-67FF8DAAF261}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{28C87D13-AEC6-4C34-A500-67FF8DAAF261}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{28C87D13-AEC6-4C34-A500-67FF8DAAF261}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{28C87D13-AEC6-4C34-A500-67FF8DAAF261}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{A6315850-7D4E-4BA5-A643-3BE4B645B928} = {B1568EAE-835F-4052-B1E4-79DB6ABBC0FC}
+		{2FB873CA-3709-4C42-A565-56F7B71A1211} = {B1568EAE-835F-4052-B1E4-79DB6ABBC0FC}
+		{76053ACD-EC86-49EA-92EA-18501DAAB7F1} = {98F39D90-94C6-4E01-BCFC-D3A1DAB74506}
+		{28C87D13-AEC6-4C34-A500-67FF8DAAF261} = {98F39D90-94C6-4E01-BCFC-D3A1DAB74506}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5B48136F-F57B-4D26-927C-77EF7BA05EB8}

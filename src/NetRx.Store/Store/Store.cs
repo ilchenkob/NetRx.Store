@@ -1,14 +1,18 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
-using NetRx.Effects;
+using NetRx.Store.Diagnostic;
+using NetRx.Store.Effects;
 
 namespace NetRx.Store
 {
     public sealed class Store : BlankStore, IStore
     {
+        private readonly ITraceMessageWriter _messageWriter = new TraceMessageWriter();
+        
         internal Store()
         {
         }
@@ -147,11 +151,16 @@ namespace NetRx.Store
                 }
             }
 
-            if (this._effects.ContainsKey(actionTypeName))
-                DispatchEffects(this._effects[actionTypeName], action);
-
             if (modifiedStates.Count > 0)
                 DetectChanges(modifiedStates);
+
+            if (Debugger.IsAttached)
+            {
+                _messageWriter.Write(actionTypeName, _items);
+            }
+
+            if (this._effects.ContainsKey(actionTypeName))
+                DispatchEffects(this._effects[actionTypeName], action);
         }
 
         private void DispatchEffects<T>(IList<IEffectMethodWrapper> effects, T action) where T : Action

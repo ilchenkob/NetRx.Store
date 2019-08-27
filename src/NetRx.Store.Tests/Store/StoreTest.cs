@@ -1,12 +1,12 @@
-﻿using System.Linq;
-using Xunit;
+﻿using NetRx.Store.Effects;
 using NetRx.Store.Exceptions;
 using NetRx.Store.Tests.State;
-using NetRx.Store.Tests.State.Reducers;
-using NetRx.Effects;
 using NetRx.Store.Tests.State.Effects;
+using NetRx.Store.Tests.State.Reducers;
 using NetRx.Store.Tests.State.TestStateActions;
 using System.Collections.Generic;
+using System.Linq;
+using Xunit;
 
 namespace NetRx.Store.Tests
 {

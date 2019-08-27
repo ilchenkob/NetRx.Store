@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
+    <Metadata>
+        <Identity Id="NetRx.Store.Monitor.Extension.78762d70-6ef3-46c5-8382-cfe295e038c8" Version="0.9" Language="en-US" Publisher="Vitalii Ilchenko" />
+        <DisplayName>NetRx.Store Monitor</DisplayName>
+        <Description xml:space="preserve">NetRx.Store Monitor extension brings an ability to observe store's state changes in a real time during the app debugging. After installation it could be found at 'Debug' -&gt; 'Windows' menu.</Description>
+        <MoreInfo>https://github.com/ilchenkob/NetRx.Store</MoreInfo>
+        <Tags>state;management;tracing;debug;monitor;</Tags>
+        <Preview>true</Preview>
+    </Metadata>
+    <Installation>
+        <InstallationTarget Id="Microsoft.VisualStudio.Community" Version="[15.0,17.0)" />
+    </Installation>
+    <Dependencies>
+        <Dependency Id="Microsoft.Framework.NDP" DisplayName="Microsoft .NET Framework" d:Source="Manual" Version="[4.5,)" />
+    </Dependencies>
+    <Prerequisites>
+        <Prerequisite Id="Microsoft.VisualStudio.Component.CoreEditor" Version="[15.0,)" DisplayName="Visual Studio core editor" />
+    </Prerequisites>
+    <Assets>
+        <Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="Project" d:ProjectName="%CurrentProject%" Path="|%CurrentProject%;PkgdefProjectOutputGroup|" />
+        <Asset Type="Microsoft.VisualStudio.Assembly" d:Source="Project" d:ProjectName="NetRx.Store.Monitor.Shared" Path="|NetRx.Store.Monitor.Shared|" AssemblyName="|NetRx.Store.Monitor.Shared;AssemblyName|" />
+        <Asset Type="Microsoft.VisualStudio.Assembly" d:Source="File" Path="Newtonsoft.Json.dll" AssemblyName="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed" />
+    </Assets>
+</PackageManifest>
