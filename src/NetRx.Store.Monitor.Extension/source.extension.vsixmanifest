@@ -1,12 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
     <Metadata>
-        <Identity Id="NetRx.Store.Monitor.Extension.78762d70-6ef3-46c5-8382-cfe295e038c8" Version="0.9" Language="en-US" Publisher="Vitalii Ilchenko" />
+        <Identity Id="NetRx.Store.Monitor.Extension.78762d70-6ef3-46c5-8382-cfe295e038c8" Version="0.9.2" Language="en-US" Publisher="Vitalii Ilchenko" />
         <DisplayName>NetRx.Store Monitor</DisplayName>
-        <Description xml:space="preserve">NetRx.Store Monitor extension brings an ability to observe store's state changes in a real time during the app debugging. After installation it could be found at 'Debug' -&gt; 'Windows' menu.</Description>
+        <Description xml:space="preserve">This extension helps to debug an application which uses NetRx.Store for state management. It allows to track dispatched actions and state changes in a real-time.</Description>
         <MoreInfo>https://github.com/ilchenkob/NetRx.Store</MoreInfo>
+        <Icon>icon.png</Icon>
         <Tags>state;management;tracing;debug;monitor;</Tags>
-        <Preview>true</Preview>
     </Metadata>
     <Installation>
         <InstallationTarget Id="Microsoft.VisualStudio.Community" Version="[15.0,17.0)" />
