@@ -11,7 +11,7 @@ It helps to track dispatched actions and state changes. Its main window is prese
 
 ![main_window](https://user-images.githubusercontent.com/2301026/66946338-05183300-f051-11e9-9d79-ea5ebf343518.PNG)
 
-#### How to use it:
+### How to use it:
 1. Make sure that your project uses [NetRx.Store](https://www.nuget.org/packages/NetRx.Store) of version 2.0 or above.
 2. Run your application in "Debug" or attach the debugger to it.
 3. Open NetRx.Store Monitor and it will be attached to the application automatically. So it will show the state changes in a real-time.
