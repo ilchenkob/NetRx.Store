@@ -4,6 +4,21 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>Key.snk</AssemblyOriginatorKeyFile>
+
+    <PackageId>NetRx.Store.Monitor.Shared</PackageId>
+    <Version>2.0.0</Version>
+    <Authors>Vitalii Ilchenko</Authors>
+    <Description>Includes library which allows to attach NetRx.Store Monitor tool to an application at a runtime</Description>
+    <RepositoryUrl>https://github.com/ilchenkob/NetRx.Store</RepositoryUrl>
+    <PackageTags>store;reactive;state;management;tools</PackageTags>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackOnBuild>true</PackOnBuild>
+    <Summary>Includes library which allows to attach NetRx.Store Monitor tool to an application at a runtime</Summary>
+    <Title>NetRx.Store.Monitor.Shared</Title>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
 
 </Project>
