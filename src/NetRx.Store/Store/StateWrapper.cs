@@ -10,6 +10,7 @@ namespace NetRx.Store
     internal sealed class StateWrapper
     {
         internal const string EnumerableFieldMarker = "#";
+        internal const string ReferenceFieldMarker = "*";
 
         private static readonly Dictionary<string, Dictionary<string, Func<object, object>>> _gettersCache
             = new Dictionary<string, Dictionary<string, Func<object, object>>>();
@@ -51,6 +52,8 @@ namespace NetRx.Store
             {
                 var isString = p.PropertyType == stringType;
                 var isEnumerable = p.PropertyType.GetInterface(typeof(IEnumerable<>).FullName) != null && !isString;
+                var isReferenceType = p.PropertyType.IsClass && !isString || (p.PropertyType.IsInterface && p.PropertyType.GetInterface(typeof(IEnumerable<>).FullName) == null);
+                
                 if (isEnumerable)
                 {
                     var hasImmutableInterface = p.PropertyType
@@ -65,10 +68,12 @@ namespace NetRx.Store
                         throw new InvalidStatePropertyTypeException(
                             $"'{p.Name}' cannot have reference type '{nonValueType.FullName}'. Should have 'struct' type");
                 }
-                else if (!p.PropertyType.IsValueType &&
+                else if (!isReferenceType &&
+                        !p.PropertyType.IsValueType &&
                           !isString &&
                           !isEnumerable)
                 {
+
                     throw new InvalidStatePropertyTypeException($"'{p.Name}' property of {prefix} cannot have reference type. Should have 'struct' type");
                 }
 
@@ -80,21 +85,24 @@ namespace NetRx.Store
                     wrappedObjectParameter
                 );
 
-                string name = isEnumerable ? $"{prefix}.{p.Name}{EnumerableFieldMarker}" : $"{prefix}.{p.Name}";
+                string name = isEnumerable 
+                    ? $"{prefix}.{p.Name}{EnumerableFieldMarker}"                     
+                    : isReferenceType 
+                        ? $"{prefix}.{p.Name}{ReferenceFieldMarker}"
+                        : $"{prefix}.{p.Name}";
 
                 _gettersCache[OriginalTypeName].Add(name, getExpression.Compile());
 
-                if (!p.PropertyType.FullName.StartsWith("System.", StringComparison.InvariantCulture)
-                    && !isEnumerable)
-                {
-                    BuildGetters(p.PropertyType, name);
-                }
             }
         }
 
         public object Get(string name)
         {
-            var key = _gettersCache[OriginalTypeName].ContainsKey(name) ? name : $"{name}{EnumerableFieldMarker}";
+            var key = _gettersCache[OriginalTypeName].ContainsKey(name) 
+                ? name 
+                :  _gettersCache[OriginalTypeName].ContainsKey($"{name}{EnumerableFieldMarker}") 
+                    ? $"{name}{EnumerableFieldMarker}"
+                    : $"{name}{ReferenceFieldMarker}";
 
             var propNamePart = key.Substring(OriginalTypeName.Length);
             var pointIndex = propNamePart.LastIndexOf('.');
@@ -124,6 +132,7 @@ namespace NetRx.Store
         public bool HasGeter(string name) =>
             _gettersCache[OriginalTypeName].ContainsKey(name) ||
                 _gettersCache[OriginalTypeName].ContainsKey($"{name}{EnumerableFieldMarker}") ||
+                _gettersCache[OriginalTypeName].ContainsKey($"{name}{ReferenceFieldMarker}") ||
                     string.Equals(name, OriginalTypeName);
 
         public object Original { get; private set; }

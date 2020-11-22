@@ -184,10 +184,14 @@ namespace NetRx.Store
 
                         var hasChanges = field.EndsWith(StateWrapper.EnumerableFieldMarker, StringComparison.InvariantCulture)
                                               ? !Equals(newValue?.GetHashCode(), prevValue?.GetHashCode())
-                                              : !Equals(newValue, prevValue);
+                                              : field.EndsWith(StateWrapper.ReferenceFieldMarker, StringComparison.InvariantCulture)
+                                                ? !ReferenceEquals(newValue,prevValue)
+                                                : !Equals(newValue, prevValue);
                         if (hasChanges)
                         {
-                            NotifySubscribers(currState, field.Replace(StateWrapper.EnumerableFieldMarker, string.Empty));
+                            NotifySubscribers(currState, 
+                                field.Replace(StateWrapper.EnumerableFieldMarker, string.Empty)
+                                .Replace(StateWrapper.ReferenceFieldMarker, string.Empty));
                         }
                     }
                 }

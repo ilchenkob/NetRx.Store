@@ -4,8 +4,11 @@ using NetRx.Store.Tests.State;
 using NetRx.Store.Tests.State.Effects;
 using NetRx.Store.Tests.State.Reducers;
 using NetRx.Store.Tests.State.TestStateActions;
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
+
 using Xunit;
 
 namespace NetRx.Store.Tests
@@ -22,18 +25,6 @@ namespace NetRx.Store.Tests
             Assert.NotNull(exception);
             Assert.IsType<InvalidStateTypeException>(exception);
             Assert.Contains(nameof(InvalidTypeState), exception.Message);
-        }
-
-        [Fact]
-        public void WithState_Should_Throw_InvalidStatePropertyTypeException_When_Reference_property_type_passed()
-        {
-            var exception = Record.Exception(
-                () => Store.Create().WithState(new InvalidPropertyTypeState(), new InvalidPropertyTypeStateReducer())
-            );
-
-            Assert.NotNull(exception);
-            Assert.IsType<InvalidStatePropertyTypeException>(exception);
-            Assert.Contains(nameof(InvalidPropertyTypeState.Model), exception.Message);
         }
 
         [Fact]
@@ -154,6 +145,27 @@ namespace NetRx.Store.Tests
 
             Assert.Single(reducer.ReduceCalls.Where(c => c == typeof(SetItemsAction).FullName));
             Assert.Equal(1, effect.CallCount);
+        }
+
+        [Fact]
+        public void Dispatch_Should_call_Reducer_Reduce_and_observable_should_invoke()
+        {
+            var reducer = new TestStateReducer();
+            var store = Store.Create()
+                .WithState(TestState.Initial, reducer);
+
+            var newObject = new ReferenceObect();
+            ReferenceObect selectedObect = null;
+
+            var disposable = store.Select<TestState, ReferenceObect>(f=> f.ReferenceObect)
+                .Subscribe(f => selectedObect = f);
+                       
+            store.Dispatch(new SetReferenceObjectAction(newObject));
+
+            disposable.Dispose();
+
+            Assert.Same(newObject, selectedObect);
+                      
         }
     }
 }
