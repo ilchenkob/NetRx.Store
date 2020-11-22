@@ -93,11 +93,6 @@ namespace NetRx.Store
 
                 _gettersCache[OriginalTypeName].Add(name, getExpression.Compile());
 
-                if (!p.PropertyType.FullName.StartsWith("System.", StringComparison.InvariantCulture)
-                    && !isEnumerable)
-                {
-                    BuildGetters(p.PropertyType, name);
-                }
             }
         }
 

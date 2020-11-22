@@ -159,16 +159,13 @@ namespace NetRx.Store.Tests
 
             var disposable = store.Select<TestState, ReferenceObect>(f=> f.ReferenceObect)
                 .Subscribe(f => selectedObect = f);
-           
+                       
             store.Dispatch(new SetReferenceObjectAction(newObject));
 
             disposable.Dispose();
 
             Assert.Same(newObject, selectedObect);
-            
-           
+                      
         }
-
-
     }
 }
