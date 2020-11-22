@@ -21,6 +21,13 @@ namespace NetRx.Store.Tests.State.Reducers
             state.Items = action.Payload.ToImmutableList();
             return state;
         }
+
+        public TestState Reduce(TestState state, TestStateActions.SetReferenceObjectAction action)
+        {
+            ReduceCalls.Add(action.GetType().FullName);
+            state.ReferenceObect = action.Payload;
+            return state;
+        }
     }
 
     public class SecondaryTestStateReducer : Reducer<SecondaryTestState>

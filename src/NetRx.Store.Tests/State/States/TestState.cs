@@ -25,6 +25,13 @@ namespace NetRx.Store.Tests.State
         };
     }
 
+    public class ReferenceObect
+    {
+        public string Name { get; set; }
+
+        public string Description { get; set; }
+    }
+
     public struct TestState
     {
         public int Id { get; set; }
@@ -39,13 +46,17 @@ namespace NetRx.Store.Tests.State
 
         public ImmutableList<string> Items { get; set; }
 
+        public ReferenceObect ReferenceObect { get;set; }
+
         public static TestState Initial => new TestState
         {
             Id = 1,
             Name = "empty_name",
             Amount = 0.7m,
             IsEnabled = true,
-            SubState = SubState.Initial
+            SubState = SubState.Initial,
+            ReferenceObect = new ReferenceObect()
+            
         };
     }
 

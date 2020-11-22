@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+
 using NetRx.Store;
 
 namespace NetRx.Store.Tests.State.TestStateActions
@@ -12,6 +13,14 @@ namespace NetRx.Store.Tests.State.TestStateActions
     {
         public SetItemsAction(List<string> payload) : base(payload)
         {
+        }
+    }
+    
+    public class SetReferenceObjectAction : Action<ReferenceObect> 
+    {
+        public SetReferenceObjectAction(ReferenceObect payload)  :base(payload)
+        {
+
         }
     }
 }

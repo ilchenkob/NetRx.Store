@@ -26,7 +26,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>NetRx.Store.Monitor.Extension</RootNamespace>
     <AssemblyName>NetRx.Store.Monitor.Extension</AssemblyName>
-    <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <GeneratePkgDefFile>true</GeneratePkgDefFile>
     <IncludeAssemblyInVSIXContainer>true</IncludeAssemblyInVSIXContainer>
     <IncludeDebugSymbolsInVSIXContainer>true</IncludeDebugSymbolsInVSIXContainer>
