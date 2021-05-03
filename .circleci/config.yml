@@ -1,12 +1,15 @@
- version: 2.1
+version: 2.1
 
- orbs:
+orbs:
   win: circleci/windows@2.2.0
 
- jobs:
-   build:
-     executor: win/default     
-    
-     steps:
-       - checkout
-       - run: dotnet build ./src/NetRx.Store/NetRx.Store.csproj -c Release
+jobs:
+  build:
+    executor: win/default     
+  
+    steps:
+      - checkout
+      - run: dotnet tool install --global dotnet-sonarscanner
+      - run: dotnet sonarscanner begin /k:"NetRx.Store" /o:"ilchenkob" /d:sonar.login="8503605054a6221d22d12efd5e128e229831c3fd"
+      - run: dotnet build ./src/NetRx.Store/NetRx.Store.csproj -c Release
+      - run: dotnet sonarscanner end /d:sonar.login="8503605054a6221d22d12efd5e128e229831c3fd"
