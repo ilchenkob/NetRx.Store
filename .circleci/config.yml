@@ -9,4 +9,4 @@
     
      steps:
        - checkout
-       - run: dotnet build /src/NetRx.Store.sln -c Release
+       - run: dotnet build ./src/NetRx.Store/NetRx.Store.csproj -c Release
